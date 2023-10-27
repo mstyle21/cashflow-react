@@ -1,0 +1,31 @@
+import { Box } from "@mui/material";
+import DashboardCardFilter, { TFilterItem } from "./DashboardCardFilter";
+import DashbordCardLogo from "./DashbordCardLogo";
+import { useState } from "react";
+import { CURRENT_MONTH, CURRENT_YEAR } from "../../helpers/utils";
+
+const DashboardCategorySection = () => {
+  const [paymentFilters, setPaymentFilters] = useState<TFilterItem>({
+    type: "month",
+    title: "Month",
+    value: {
+      month: CURRENT_MONTH,
+      year: CURRENT_YEAR.toString(),
+    },
+  });
+  console.log(paymentFilters);
+
+  return (
+    <section className="dashboard-card">
+      <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
+        <DashbordCardLogo path="/images/table-sign.png" title="Categories" />
+        <DashboardCardFilter elemId="categoryPaymentFilter" setPaymentFilters={setPaymentFilters} />
+      </Box>
+      <Box display="flex" justifyContent="center" height="300px">
+        {/* <DashboardCategoryStatistics filters={paymentFilters} /> */}
+      </Box>
+    </section>
+  );
+};
+
+export default DashboardCategorySection;
