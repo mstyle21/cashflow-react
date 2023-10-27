@@ -13,12 +13,12 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import LoadingSpinner from "../LoadingSpinner";
-import { CURRENCY_SIGN, CURRENT_YEAR, MONTHS } from "../../helpers/utils";
+import { BACKEND_URL, CURRENCY_SIGN, CURRENT_YEAR, MONTHS } from "../../helpers/utils";
 import { TFilterItem } from "./DashboardCardFilter";
 import { isArray } from "chart.js/helpers";
 import moment from "moment";
 
-const API_URL = "http://localhost:7000/api/expenditures/stats";
+const API_URL = `${BACKEND_URL}/api/expenditures/stats`;
 
 interface TExpenditureStats {
   id: number;

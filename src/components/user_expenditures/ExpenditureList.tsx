@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { CURRENCY_SIGN } from "../../helpers/utils";
+import { BACKEND_URL, CURRENCY_SIGN } from "../../helpers/utils";
 
 export type TApiExpenditure = {
   id: number;
@@ -45,9 +45,7 @@ const ExpenditureList = ({ expenditures, openModal }: ExpenditureListProps) => {
             day: "2-digit",
           }).format(date);
           const imgPath =
-            expenditure.images.length > 0
-              ? `http://localhost:7000/${expenditure.id}/${expenditure.images[0].path}`
-              : null;
+            expenditure.images.length > 0 ? `${BACKEND_URL}/${expenditure.id}/${expenditure.images[0].path}` : null;
 
           return (
             <Box key={expenditure.id} className="expenditure-box" onClick={() => openModal(expenditure)}>

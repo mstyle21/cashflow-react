@@ -4,7 +4,7 @@ import { Form } from "react-bootstrap";
 import { EIReducerAction, TExpenditureImage } from "./ExpenditureModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
-import { randomHash } from "../../helpers/utils";
+import { BACKEND_URL, randomHash } from "../../helpers/utils";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -85,7 +85,7 @@ const ExpenditureImageUpload = ({ images, dispatch }: ExpenditureImageUploadProp
   const handleDeleteImage = (image: TExpenditureImage) => {
     if (confirm("Are you sure you want to delete this image?")) {
       axios
-        .delete("http://localhost:7000/api/expenditures/image/" + image.hash, {
+        .delete(`${BACKEND_URL}/api/expenditures/image/${image.hash}`, {
           headers: { "x-access-token": user?.token ?? "missing-token" },
         })
         .then((response) => {
@@ -146,7 +146,7 @@ const ExpenditureImageUpload = ({ images, dispatch }: ExpenditureImageUploadProp
                     onClick={() => handleDeleteImage(image)}
                   />
                   <img
-                    src={`http://localhost:7000/${image.expenditureId}/${image.path}`}
+                    src={`${BACKEND_URL}/${image.expenditureId}/${image.path}`}
                     style={{ height: "auto", width: "100%", objectFit: "contain" }}
                   />
                 </Box>

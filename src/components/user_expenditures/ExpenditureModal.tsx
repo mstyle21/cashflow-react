@@ -6,6 +6,7 @@ import ExpenditureItemList from "./ExpenditureItemList";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { TEditableExpenditure } from "../../pages/Expenditure";
+import { BACKEND_URL } from "../../helpers/utils";
 
 export type TExpenditureDetails = {
   date: Date | null;
@@ -159,7 +160,7 @@ const ExpenditureModal = ({ show, setShow, closeModalAndRefresh, itemToEdit }: E
     if (itemToEdit) {
       //edit
       axios
-        .put("http://localhost:7000/api/expenditures/" + itemToEdit.id, formData, {
+        .put(`${BACKEND_URL}/api/expenditures/${itemToEdit.id}`, formData, {
           headers: { "x-access-token": user?.token ?? "missing-token" },
         })
         .then((response) => {
@@ -174,7 +175,7 @@ const ExpenditureModal = ({ show, setShow, closeModalAndRefresh, itemToEdit }: E
     } else {
       //create
       axios
-        .post("http://localhost:7000/api/expenditures", formData, {
+        .post(`${BACKEND_URL}/api/expenditures`, formData, {
           headers: { "x-access-token": user?.token ?? "missing-token" },
         })
         .then((response) => {

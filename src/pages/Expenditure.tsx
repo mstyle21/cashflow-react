@@ -3,7 +3,7 @@ import ExpenditureList, { TApiExpenditure } from "../components/user_expenditure
 import PageTitle from "../components/layout/PageTitle";
 import YearFilter from "../components/YearFilter";
 import MonthFilter from "../components/MonthFilter";
-import { CURRENCY_SIGN, CURRENT_MONTH, CURRENT_YEAR, randomHash } from "../helpers/utils";
+import { BACKEND_URL, CURRENCY_SIGN, CURRENT_MONTH, CURRENT_YEAR, randomHash } from "../helpers/utils";
 import useFetch from "../hooks/useFetch";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { isArray } from "chart.js/helpers";
@@ -36,7 +36,7 @@ const Expenditure = () => {
     if (year) setYear(year);
   };
 
-  const API_URL = `http://localhost:7000/api/expenditures?month=${month}&year=${year}&${refreshHash}`;
+  const API_URL = `${BACKEND_URL}/api/expenditures?month=${month}&year=${year}&${refreshHash}`;
 
   const { data, isLoading, error } = useFetch<TApiExpenditure[]>(API_URL);
 

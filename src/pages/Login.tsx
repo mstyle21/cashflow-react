@@ -13,7 +13,6 @@ export default function Login() {
   const { user, loginRedirect, login } = useContext(AuthContext);
 
   if (user) {
-    console.log(loginRedirect);
     return <Navigate to={loginRedirect ?? "/"} replace />;
   }
 

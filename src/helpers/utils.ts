@@ -17,11 +17,15 @@ export const CURRENT_MONTH = MONTHS[new Date().getMonth()];
 export const CURRENCY_SIGN = "RON";
 export const BACKEND_URL = "http://localhost:7000";
 
-export function arrayRange(
-  start: number,
-  end: number,
-  step: number = 1
-): number[] {
+/**
+ * Generates an array of numbers between start and end incremented by step
+ * Step default value is 1
+ * @param start
+ * @param end
+ * @param step
+ * @returns
+ */
+export function arrayRange(start: number, end: number, step: number = 1): number[] {
   const array = [];
 
   for (let i = start; i <= end; i += step) {
@@ -31,9 +35,13 @@ export function arrayRange(
   return array;
 }
 
+/**
+ * Generate a random hash, default length: 5
+ * @param length
+ * @returns string
+ */
 export function randomHash(length: number = 5): string {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const charactersLength = characters.length;
   let hash = "";
 
@@ -43,4 +51,21 @@ export function randomHash(length: number = 5): string {
   }
 
   return hash;
+}
+
+/**
+ * Debugging purposes
+ * @param expireTime
+ * @returns string
+ */
+export function displayRemainingTokenTime(expireTime: number): string {
+  const now = Date.now() / 1000;
+  //save difference in seconds
+  const secondsDiff = Math.floor(expireTime - now);
+  //save difference in minutes
+  const minutesDiff = Math.floor(secondsDiff / 60);
+  //save difference in hours
+  const hoursDiff = Math.floor(minutesDiff / 60);
+
+  return `${hoursDiff}h : ${minutesDiff - hoursDiff * 60}min : ${secondsDiff - minutesDiff * 60}sec`;
 }

@@ -18,10 +18,22 @@ type TTokenPayload = {
   exp: number;
 };
 
+export type TTokenStatus = "valid" | "expired" | "expire-soon";
+
+/**
+ * Decode the token and split it to get the payload data
+ * @param token
+ * @returns TTokenPayload
+ */
 const getTokenPayload = (token: string): TTokenPayload => {
   return JSON.parse(atob(token.split(".")[1]));
 };
 
+/**
+ * Get user details from token
+ * @param token
+ * @returns IUser
+ */
 const getUserFromToken = (token: string): IUser => {
   const tokenPayload = getTokenPayload(token);
   return {
@@ -45,38 +57,42 @@ export const useAuth = () => {
   });
   const [loginRedirect, setLoginRedirect] = useState<string | null>(null);
 
-  const login = (token: string) => {
+  const login = (token: string): void => {
     const user = getUserFromToken(token);
     setUser(user);
     setItem(TOKEN_KEY, token);
-
-    // const tokenPayload = getTokenPayload(user.token);
-    // const expiration = tokenPayload.exp * 1000 - Date.now();
-    // setTimeout(() => {
-    //   logout();
-    // }, expiration);
   };
 
-  const logout = (redirectPath: string | null = null) => {
+  const logout = (redirectPath: string | null = null): void => {
     setLoginRedirect(redirectPath);
 
     setUser(null);
     removeItem(TOKEN_KEY);
   };
 
-  const isTokenValid = (): boolean => {
+  const getTokenStatus = (): TTokenStatus => {
     if (!user || !user.token) {
-      return false;
+      return "expired";
     }
     const tokenPayload = getTokenPayload(user.token);
-    const isTokenExpired = tokenPayload.exp * 1000 < Date.now();
 
-    if (isTokenExpired) {
-      return false;
+    const now = Math.floor(Date.now() / 1000);
+
+    if (now > tokenPayload.exp) {
+      return "expired";
     }
 
-    return true;
+    //if expire time is within 10 minutes (600 seconds), refresh token
+    if (now < tokenPayload.exp && now + 6000 > tokenPayload.exp) {
+      return "expire-soon";
+    }
+
+    return "valid";
   };
 
-  return { user, loginRedirect, login, logout, isTokenValid };
+  const setNewToken = (token: string): void => {
+    setItem(TOKEN_KEY, token);
+  };
+
+  return { user, loginRedirect, login, logout, getTokenStatus, setNewToken };
 };

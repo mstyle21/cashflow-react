@@ -6,10 +6,8 @@ type ProtectedRouteProps = {
   allowedRoles?: string[];
   children?: JSX.Element;
 };
-export const ProtectedRoute = ({
-  allowedRoles = [],
-  children,
-}: ProtectedRouteProps) => {
+
+export const ProtectedRoute = ({ allowedRoles = [], children }: ProtectedRouteProps) => {
   const { user } = useContext(AuthContext);
 
   if (allowedRoles.length) {
