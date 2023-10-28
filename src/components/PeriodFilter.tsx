@@ -4,17 +4,16 @@ import { Box, capitalize } from "@mui/material";
 import React, { ReactNode, useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import ReactSelect from "react-select";
-import { CURRENT_MONTH, CURRENT_YEAR } from "../../helpers/utils";
+import { CURRENT_MONTH, CURRENT_YEAR } from "../helpers/utils";
 
-type DashboardCardFilterProps = {
-  elemId: string;
-  setPaymentFilters: React.Dispatch<React.SetStateAction<TFilterItem>>;
+type PeriodFilterProps = {
+  setPeriodFilters: React.Dispatch<React.SetStateAction<TPeriodFilterItem>>;
 };
 type TFilterItemValue = {
   month: string;
   year: string;
 };
-export type TFilterItem = {
+export type TPeriodFilterItem = {
   type: "allTime" | "month" | "year";
   title: string;
   content?: ReactNode;
@@ -158,8 +157,8 @@ const YearFilter = ({ handleFilterSelection }: TFilterProps) => {
  * @param param0
  * @returns
  */
-const DashboardCardFilter = ({ elemId, setPaymentFilters }: DashboardCardFilterProps) => {
-  const [activeFilter, setActiveFilter] = useState<TFilterItem>({
+const PeriodFilter = ({ setPeriodFilters }: PeriodFilterProps) => {
+  const [activeFilter, setActiveFilter] = useState<TPeriodFilterItem>({
     type: "month",
     title: "Month",
     value: {
@@ -181,10 +180,10 @@ const DashboardCardFilter = ({ elemId, setPaymentFilters }: DashboardCardFilterP
     delete filterItem.content;
 
     setActiveFilter(filterItem);
-    setPaymentFilters(filterItem);
+    setPeriodFilters(filterItem);
   };
 
-  const items: TFilterItem[] = [
+  const items: TPeriodFilterItem[] = [
     {
       type: "allTime",
       title: "All time",
@@ -207,7 +206,7 @@ const DashboardCardFilter = ({ elemId, setPaymentFilters }: DashboardCardFilterP
 
   return (
     <Dropdown autoClose="outside">
-      <Dropdown.Toggle variant="default" className="dc-filter-btn" id={elemId}>
+      <Dropdown.Toggle variant="default" className="dc-filter-btn">
         <span style={{ marginRight: "10px" }}>{activeFilter.title}</span>
         <FontAwesomeIcon icon={faCalendar} />
       </Dropdown.Toggle>
@@ -242,4 +241,4 @@ const DashboardCardFilter = ({ elemId, setPaymentFilters }: DashboardCardFilterP
   );
 };
 
-export default DashboardCardFilter;
+export default PeriodFilter;

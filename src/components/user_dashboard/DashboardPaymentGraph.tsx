@@ -15,7 +15,7 @@ import {
 import { Line } from "react-chartjs-2";
 import LoadingSpinner from "../LoadingSpinner";
 import { BACKEND_URL, CURRENCY_SIGN, CURRENT_YEAR, MONTHS } from "../../helpers/utils";
-import { TFilterItem } from "./DashboardCardFilter";
+import { TPeriodFilterItem } from "../PeriodFilter";
 import { isArray } from "chart.js/helpers";
 import moment from "moment";
 
@@ -27,11 +27,11 @@ interface TExpenditureStats {
   purchaseDate: string;
 }
 
-type DashboardPaymentStatisticsProps = {
-  filters: TFilterItem;
+type DashboardPaymentGraphProps = {
+  filters: TPeriodFilterItem;
 };
 
-const DashboardPaymentStatistics = ({ filters }: DashboardPaymentStatisticsProps) => {
+const DashboardPaymentGraph = ({ filters }: DashboardPaymentGraphProps) => {
   const { data, isLoading, error } = useFetch<TExpenditureStats[]>(
     `${API_URL}?month=${filters.value.month}&year=${filters.value.year}&type=${filters.type}`,
     {
@@ -117,9 +117,9 @@ const DashboardPaymentStatistics = ({ filters }: DashboardPaymentStatisticsProps
   );
 };
 
-export default DashboardPaymentStatistics;
+export default DashboardPaymentGraph;
 
-function processPaymentStats(filters: TFilterItem, expenditureStats: TExpenditureStats[] | null) {
+function processPaymentStats(filters: TPeriodFilterItem, expenditureStats: TExpenditureStats[] | null) {
   const labels: string[] = [];
   const stats: number[] = [];
 

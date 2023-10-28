@@ -20,30 +20,34 @@ export default function useFetch<T = unknown>(url: string, options?: RequestInit
 
     const abortController = new AbortController();
 
-    try {
-      fetch(url, options)
-        .then((response) => response.json() as T)
-        .then((data) => {
-          setData(data);
-          setIsLoading(false);
-          setError(null);
-        })
-        .catch((error: TypeError) => {
-          if (error.name === "AbortError") {
-            console.error(error);
-          } else {
-            if (error.message.includes("Token expired!")) {
-              const redirectPath = window.location.pathname !== "/login" ? window.location.pathname : undefined;
-              logout(redirectPath);
-            }
+    const fetchData = async () => {
+      try {
+        await fetch(url, { ...options, signal: abortController.signal })
+          .then((response) => response.json() as T)
+          .then((data) => {
+            setData(data);
             setIsLoading(false);
-            setError("Oops! Something went wrong.");
-          }
-        });
-    } catch (err) {
-      console.error(err);
-      setError("Oops! Something went wrong!");
-    }
+            setError(null);
+          })
+          .catch((error: TypeError) => {
+            if (error.name === "AbortError") {
+              console.error(error);
+            } else {
+              if (error.message.includes("Token expired!")) {
+                const redirectPath = window.location.pathname !== "/login" ? window.location.pathname : undefined;
+                logout(redirectPath);
+              }
+              setIsLoading(false);
+              setError("Oops! Something went wrong.");
+            }
+          });
+      } catch (err) {
+        console.error(err);
+        setError("Oops! Something went wrong!");
+      }
+    };
+
+    fetchData();
 
     return () => abortController.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps

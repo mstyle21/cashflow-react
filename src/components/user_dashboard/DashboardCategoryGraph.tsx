@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { BACKEND_URL, COLORS, CURRENCY_SIGN } from "../../helpers/utils";
 import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../LoadingSpinner";
-import { TFilterItem } from "./DashboardCardFilter";
+import { TPeriodFilterItem } from "../PeriodFilter";
 import { Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -19,15 +19,11 @@ import {
 } from "chart.js";
 
 import { isArray } from "chart.js/helpers";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { TApiCategory } from "../user_expenditures/ExpenditureItemList";
-import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
 
 const API_URL = `${BACKEND_URL}/api/categories/stats`;
 
-type TCategoryStats = {
+type TExpenditureItemsStats = {
   id: number;
   quantity: number;
   pricePerUnit: number;
@@ -35,37 +31,21 @@ type TCategoryStats = {
   category: {
     id: number;
     name: string;
+    parent: {
+      id: number;
+      name: string;
+    };
   };
 };
 
-const DashboardCategoryStatistics = ({ filters }: { filters: TFilterItem }) => {
-  const { user } = useContext(AuthContext);
-  const {
-    isLoading: loadingCategories,
-    error: errorCategories,
-    data: categoryData,
-  } = useQuery(
-    ["categories"],
-    async () => {
-      try {
-        const response = await axios.get<TApiCategory[]>(`${BACKEND_URL}/api/categories/?organized=true`, {
-          headers: { "x-access-token": user?.token ?? "missing-token" },
-        });
+type DashboardCategoryGraphProps = {
+  organizedCategories: TApiCategory[];
+  filters: TPeriodFilterItem & { categoryId: number };
+};
 
-        return response.data ?? [];
-      } catch (error) {
-        console.error(error);
-      }
-
-      return [];
-    },
-    {
-      staleTime: 300000,
-    }
-  );
-
-  const { data, isLoading, error } = useFetch<TCategoryStats[]>(
-    `${API_URL}?month=${filters.value.month}&year=${filters.value.year}&type=${filters.type}`,
+const DashboardCategoryGraph = ({ organizedCategories, filters }: DashboardCategoryGraphProps) => {
+  const { data, isLoading, error } = useFetch<TExpenditureItemsStats[]>(
+    `${API_URL}?month=${filters.value.month}&year=${filters.value.year}&type=${filters.type}&category=${filters.categoryId}`,
     {
       method: "GET",
       headers: {
@@ -74,9 +54,6 @@ const DashboardCategoryStatistics = ({ filters }: { filters: TFilterItem }) => {
     }
   );
 
-  if (loadingCategories) return <LoadingSpinner />;
-  if (errorCategories) return <div className="alert alert-danger">Something went wrong</div>;
-
   if (error) {
     return <div>{error}</div>;
   }
@@ -84,9 +61,7 @@ const DashboardCategoryStatistics = ({ filters }: { filters: TFilterItem }) => {
     return <LoadingSpinner />;
   }
 
-  const parentFilter = null;
-
-  const { labels, organizedStats } = processCategoryStats(categoryData, data, parentFilter);
+  const { labels, organizedStats } = processCategoryStats(organizedCategories, data, filters.categoryId);
 
   const pieData: ChartData<"pie"> = {
     labels: labels,
@@ -123,44 +98,44 @@ const DashboardCategoryStatistics = ({ filters }: { filters: TFilterItem }) => {
   );
 };
 
-export default DashboardCategoryStatistics;
+export default DashboardCategoryGraph;
 
 const processCategoryStats = (
-  categoryData: TApiCategory[] | undefined,
-  categoryStats: TCategoryStats[] | null,
-  parentFilter: number | null
+  categoryList: TApiCategory[] | undefined,
+  expenditureItems: TExpenditureItemsStats[] | null,
+  parentFilter: number
 ) => {
   const labels: string[] = [];
   const organizedStats: number[] = [];
 
   const selectedCategory: { [key: number]: { name: string; value: number } } = {};
 
-  const childParentList: { [key: number]: number } = {};
-  if (isArray(categoryData) && categoryData.length) {
-    categoryData?.forEach((category) => {
-      if (parentFilter === null && category.parent === parentFilter) {
+  if (isArray(categoryList) && categoryList.length) {
+    categoryList.forEach((category) => {
+      if (parentFilter === 0 && category.parent === null) {
         selectedCategory[category.id] = {
           name: category.name,
           value: 0,
         };
-      } else {
-        if (category.parent) {
-          if (category.parent.id === parentFilter) {
-            selectedCategory[category.id] = {
-              name: category.name,
-              value: 0,
-            };
-          }
-          childParentList[category.id] = category.parent.id;
+      }
+      if (parentFilter !== 0 && category.parent) {
+        if (category.parent.id === parentFilter) {
+          selectedCategory[category.id] = {
+            name: category.name,
+            value: 0,
+          };
         }
       }
     });
   }
 
-  if (isArray(categoryStats) && categoryStats.length) {
-    categoryStats.forEach((expenditureItem) => {
-      const categId = parentFilter ? expenditureItem.category.id : childParentList[expenditureItem.category.id];
-      selectedCategory[categId].value += expenditureItem.totalPrice;
+  if (isArray(expenditureItems) && expenditureItems.length) {
+    expenditureItems.forEach((expenditureItem) => {
+      const categId = parentFilter !== 0 ? expenditureItem.category.id : expenditureItem.category.parent.id;
+
+      if (selectedCategory[categId] !== undefined) {
+        selectedCategory[categId].value += expenditureItem.totalPrice;
+      }
     });
   }
 
