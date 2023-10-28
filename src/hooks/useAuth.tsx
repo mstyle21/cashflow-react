@@ -90,9 +90,5 @@ export const useAuth = () => {
     return "valid";
   };
 
-  const setNewToken = (token: string): void => {
-    setItem(TOKEN_KEY, token);
-  };
-
-  return { user, loginRedirect, login, logout, getTokenStatus, setNewToken };
+  return { user, loginRedirect, login, logout, getTokenStatus };
 };

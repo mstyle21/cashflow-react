@@ -14,12 +14,15 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import LoadingSpinner from "../LoadingSpinner";
 
-type TApiCategory = {
+export type TApiCategory = {
   id: number;
   name: string;
   created: string;
   updated: string;
-  parent?: null;
+  parent: {
+    id: number;
+    name: string;
+  } | null;
   childs: TApiCategory[];
 };
 

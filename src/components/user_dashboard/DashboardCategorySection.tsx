@@ -3,6 +3,7 @@ import DashboardCardFilter, { TFilterItem } from "./DashboardCardFilter";
 import DashbordCardLogo from "./DashbordCardLogo";
 import { useState } from "react";
 import { CURRENT_MONTH, CURRENT_YEAR } from "../../helpers/utils";
+import DashboardCategoryStatistics from "./DashboardCategoryStatistics";
 
 const DashboardCategorySection = () => {
   const [paymentFilters, setPaymentFilters] = useState<TFilterItem>({
@@ -13,7 +14,6 @@ const DashboardCategorySection = () => {
       year: CURRENT_YEAR.toString(),
     },
   });
-  console.log(paymentFilters);
 
   return (
     <section className="dashboard-card">
@@ -22,7 +22,7 @@ const DashboardCategorySection = () => {
         <DashboardCardFilter elemId="categoryPaymentFilter" setPaymentFilters={setPaymentFilters} />
       </Box>
       <Box display="flex" justifyContent="center" height="300px">
-        {/* <DashboardCategoryStatistics filters={paymentFilters} /> */}
+        <DashboardCategoryStatistics filters={paymentFilters} />
       </Box>
     </section>
   );

@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
   ChartOptions,
+  ChartData,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import LoadingSpinner from "../LoadingSpinner";
@@ -64,7 +65,7 @@ const DashboardPaymentStatistics = ({ filters }: DashboardPaymentStatisticsProps
       break;
   }
 
-  const lineData = {
+  const lineData: ChartData<"line"> = {
     labels,
     datasets: [
       {
@@ -75,15 +76,11 @@ const DashboardPaymentStatistics = ({ filters }: DashboardPaymentStatisticsProps
       },
     ],
   };
-  const options: ChartOptions<"line"> = {
+  const lineOptions: ChartOptions<"line"> = {
     responsive: true,
     plugins: {
       legend: {
         position: "top" as const,
-      },
-      title: {
-        display: true,
-        text: "Chart.js Line Chart",
       },
       tooltip: {
         callbacks: {
@@ -115,7 +112,7 @@ const DashboardPaymentStatistics = ({ filters }: DashboardPaymentStatisticsProps
 
   return (
     <Box width="100%" height="300px">
-      <Line options={options} data={lineData} />
+      <Line options={lineOptions} data={lineData} />
     </Box>
   );
 };
