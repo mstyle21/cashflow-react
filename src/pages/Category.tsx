@@ -82,7 +82,7 @@ const Category = () => {
         </Box>
       </Box>
       {isLoading && <LoadingSpinner />}
-      {isError && <div className="alert alert-danger">Something went wrong while getting categories</div>}
+      {isError && <div className="alert alert-danger">Something went wrong. Please try again later</div>}
       <CategoryList categories={categories} editCategory={handleEditCategory} refreshList={handleRefreshList} />
       <CategoryModal
         key={itemToEdit?.id}

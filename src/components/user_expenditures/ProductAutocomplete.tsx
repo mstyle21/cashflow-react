@@ -4,13 +4,7 @@ import { BACKEND_URL } from "../../helpers/utils";
 import axios, { AxiosError } from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { Dropdown, FloatingLabel, Form } from "react-bootstrap";
-
-type TApiProduct = {
-  id: number;
-  name: string;
-  created: string;
-  updated: string;
-};
+import { TApiProduct } from "../../pages/Product";
 
 const ProductAutocomplete = ({
   itemName,
@@ -28,12 +22,9 @@ const ProductAutocomplete = ({
     let options: string[] = [];
     if (value !== "" && value.length > 0) {
       try {
-        const response = await axios.get<TApiProduct[]>(
-          `${BACKEND_URL}/api/products/?search=${value}`,
-          {
-            headers: { "x-access-token": user?.token ?? "missing-token" },
-          }
-        );
+        const response = await axios.get<TApiProduct[]>(`${BACKEND_URL}/api/products/autocomplete/?search=${value}`, {
+          headers: { "x-access-token": user?.token ?? "missing-token" },
+        });
 
         options = response.data.map((product) => product.name);
       } catch (e) {
@@ -77,11 +68,7 @@ const ProductAutocomplete = ({
       </FloatingLabel>
 
       {options.length > 0 && (
-        <Dropdown.Menu
-          className="product-autocomplete"
-          id="productAutocomplete"
-          show
-        >
+        <Dropdown.Menu className="product-autocomplete" id="productAutocomplete" show>
           {options.map((option, index) => (
             <Dropdown.Item
               key={index}

@@ -4,6 +4,7 @@ import Category from "./pages/Category";
 import Dashboard from "./pages/Dashboard";
 import Expenditure from "./pages/Expenditure";
 import Login from "./pages/Login";
+import Product from "./pages/Product";
 import UserLayout from "./pages/UserLayout";
 
 export const routes = [
@@ -27,6 +28,10 @@ export const routes = [
       {
         path: "categories",
         element: <Category />,
+      },
+      {
+        path: "products",
+        element: <Product />,
       },
       {
         path: "*",
