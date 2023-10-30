@@ -8,7 +8,7 @@ const MENU_ITEMS = [
   { path: "/expenditures", name: "Expenditure" },
   { path: "/categories", name: "Categories" },
   { path: "/products", name: "Products" },
-  { path: "/budget", name: "Budget" },
+  // { path: "/budget", name: "Budget" },
 ];
 
 function LinkNavbar() {

@@ -13,18 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import LoadingSpinner from "../LoadingSpinner";
-
-export type TApiCategory = {
-  id: number;
-  name: string;
-  created: string;
-  updated: string;
-  parent: {
-    id: number;
-    name: string;
-  } | null;
-  childs: TApiCategory[];
-};
+import { TApiCategory } from "../../pages/Category";
 
 type ExpenditureItemListProps = {
   totalPrice: number | "";
