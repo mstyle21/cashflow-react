@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import LoadingSpinner from "../LoadingSpinner";
-import { TApiCategory } from "../user_expenditures/ExpenditureItemList";
+import { TApiCategory } from "../../pages/Category";
 
 const DashboardCategorySection = () => {
   const [periodFilters, setPeriodFilters] = useState<TPeriodFilterItem>({
@@ -76,7 +76,7 @@ const DashboardCategorySection = () => {
           <PeriodFilter setPeriodFilters={setPeriodFilters} />
         </Box>
       </Box>
-      <Box display="flex" justifyContent="center" height="300px">
+      <Box display="flex" flexDirection="column" alignItems="center" gap="20px" height="350px">
         <DashboardCategoryGraph
           key={activeCategory}
           organizedCategories={organizedCategories ?? []}

@@ -1,4 +1,4 @@
-import { Box, capitalize } from "@mui/material";
+import { Box, Typography, capitalize } from "@mui/material";
 import useFetch from "../../hooks/useFetch";
 import {
   Chart as ChartJS,
@@ -49,7 +49,7 @@ const DashboardPaymentGraph = ({ filters }: DashboardPaymentGraphProps) => {
     return <LoadingSpinner />;
   }
 
-  const { labels, stats: dataValues } = processPaymentStats(filters, data);
+  const { labels, stats: dataValues, totalSpent } = processPaymentStats(filters, data);
 
   let label: string;
   switch (filters.type) {
@@ -111,9 +111,16 @@ const DashboardPaymentGraph = ({ filters }: DashboardPaymentGraphProps) => {
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
   return (
-    <Box width="100%" height="300px">
-      <Line options={lineOptions} data={lineData} />
-    </Box>
+    <>
+      <Box>
+        <Typography fontWeight="bold" fontSize="30px">
+          {totalSpent / 100} {CURRENCY_SIGN}
+        </Typography>
+      </Box>
+      <Box width="100%" height="300px">
+        <Line options={lineOptions} data={lineData} />
+      </Box>
+    </>
   );
 };
 
@@ -150,6 +157,7 @@ function processPaymentStats(filters: TPeriodFilterItem, expenditureStats: TExpe
       break;
   }
 
+  let totalSpent = 0;
   if (isArray(expenditureStats) && expenditureStats.length) {
     const timeStats: { [key: string]: number } = {};
     labels.forEach((label) => {
@@ -164,6 +172,8 @@ function processPaymentStats(filters: TPeriodFilterItem, expenditureStats: TExpe
       } else {
         console.error("Something went wrong with chart labels");
       }
+
+      totalSpent += expenditureDetails.totalPrice;
     });
 
     for (const [, value] of Object.entries(timeStats)) {
@@ -171,5 +181,5 @@ function processPaymentStats(filters: TPeriodFilterItem, expenditureStats: TExpe
     }
   }
 
-  return { labels, stats };
+  return { labels, stats, totalSpent };
 }

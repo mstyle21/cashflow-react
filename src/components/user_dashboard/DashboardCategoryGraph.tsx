@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { BACKEND_URL, COLORS, CURRENCY_SIGN } from "../../helpers/utils";
 import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../LoadingSpinner";
@@ -19,7 +19,7 @@ import {
 } from "chart.js";
 
 import { isArray } from "chart.js/helpers";
-import { TApiCategory } from "../user_expenditures/ExpenditureItemList";
+import { TApiCategory } from "../../pages/Category";
 
 const API_URL = `${BACKEND_URL}/api/categories/stats`;
 
@@ -61,7 +61,7 @@ const DashboardCategoryGraph = ({ organizedCategories, filters }: DashboardCateg
     return <LoadingSpinner />;
   }
 
-  const { labels, organizedStats } = processCategoryStats(organizedCategories, data, filters.categoryId);
+  const { labels, organizedStats, totalSpent } = processCategoryStats(organizedCategories, data, filters.categoryId);
 
   const pieData: ChartData<"pie"> = {
     labels: labels,
@@ -92,9 +92,16 @@ const DashboardCategoryGraph = ({ organizedCategories, filters }: DashboardCateg
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
 
   return (
-    <Box width="100%" height="300px">
-      <Pie options={pieOptions} data={pieData} />
-    </Box>
+    <>
+      <Box>
+        <Typography fontWeight="bold" fontSize="30px">
+          {totalSpent / 100} {CURRENCY_SIGN}
+        </Typography>
+      </Box>
+      <Box width="100%" height="300px">
+        <Pie options={pieOptions} data={pieData} />
+      </Box>
+    </>
   );
 };
 
@@ -142,10 +149,12 @@ const processCategoryStats = (
   //sort categories by price DESC
   const sortedCategories = Object.entries(selectedCategory).sort((a, b) => b[1].value - a[1].value);
 
+  let totalSpent = 0;
   for (const sortedCategory of sortedCategories) {
     labels.push(`${sortedCategory[1].name} (${sortedCategory[1].value / 100})`);
     organizedStats.push(sortedCategory[1].value / 100);
+    totalSpent += sortedCategory[1].value;
   }
 
-  return { labels, organizedStats };
+  return { labels, organizedStats, totalSpent };
 };

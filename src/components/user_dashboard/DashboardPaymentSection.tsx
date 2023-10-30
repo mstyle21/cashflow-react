@@ -21,7 +21,7 @@ const DashboardPaymentSection = () => {
         <DashbordCardLogo path="/images/dollar-sign.png" title="Payments" />
         <PeriodFilter setPeriodFilters={setPeriodFilters} />
       </Box>
-      <Box display="flex" justifyContent="center" height="300px">
+      <Box display="flex" flexDirection="column" alignItems="center" gap="20px" height="350px">
         <DashboardPaymentGraph filters={periodFilters} />
       </Box>
     </section>
