@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import Footer from "../components/layout/Footer";
-import TopNavbar from "../components/layout/TopNavbar";
+import Footer from "./Footer";
+import TopNavbar from "./TopNavbar";
 import { Box } from "@mui/material";
 
 export default function UserLayout() {

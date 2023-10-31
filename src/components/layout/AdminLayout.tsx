@@ -1,5 +1,8 @@
-import SignOutButton from "../components/SignOutButton";
+import SignOutButton from "../SignOutButton";
 
+/**
+ * TO BE IMPLEMENTED
+ */
 export default function AdminLayout() {
   console.log("Admin layout loaded");
 
