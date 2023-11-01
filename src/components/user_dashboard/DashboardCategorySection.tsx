@@ -1,15 +1,16 @@
 import { Box } from "@mui/material";
-import PeriodFilter, { TPeriodFilterItem } from "../PeriodFilter";
+import PeriodFilter, { TPeriodFilterItem } from "../filters/PeriodFilter";
 import DashbordCardLogo from "./DashbordCardLogo";
 import { useContext, useState } from "react";
-import { BACKEND_URL, CURRENT_MONTH, CURRENT_YEAR } from "../../helpers/utils";
+import { CURRENT_MONTH, CURRENT_YEAR } from "../../utils/utils";
 import DashboardCategoryGraph from "./DashboardCategoryGraph";
-import MainCategoryFilter from "../MainCategoryFilter";
+import MainCategoryFilter from "../filters/MainCategoryFilter";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import LoadingSpinner from "../LoadingSpinner";
 import { TApiCategory } from "../../pages/Category";
+import { CONFIG } from "../../config";
 
 const DashboardCategorySection = () => {
   const [periodFilters, setPeriodFilters] = useState<TPeriodFilterItem>({
@@ -31,7 +32,7 @@ const DashboardCategorySection = () => {
     ["categories"],
     async () => {
       try {
-        const response = await axios.get<TApiCategory[]>(`${BACKEND_URL}/api/categories/?organized=true`, {
+        const response = await axios.get<TApiCategory[]>(`${CONFIG.backendUrl}/api/categories/?organized=true`, {
           headers: { "x-access-token": user?.token ?? "missing-token" },
         });
 

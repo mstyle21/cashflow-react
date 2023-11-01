@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { SetStateAction, useContext } from "react";
 import { FloatingLabel, Form } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext";
-import { BACKEND_URL } from "../../helpers/utils";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import AsyncCreatableSelect from "react-select/async-creatable";
@@ -11,6 +10,7 @@ import ReactSelect from "react-select";
 import LoadingSpinner from "../LoadingSpinner";
 import { TExpenditureDetails } from "./ExpenditureModal";
 import { isNumber } from "chart.js/helpers";
+import { CONFIG } from "../../config";
 
 type Company = {
   id: number;
@@ -44,7 +44,7 @@ const ExpenditureGeneralDetails = ({
       let list: SelectOption[] | [] = [];
       let defaultOption: SelectOption | object = {};
       try {
-        const response = await axios.get<Company[]>(`${BACKEND_URL}/api/cities/`, {
+        const response = await axios.get<Company[]>(`${CONFIG.backendUrl}/api/cities/`, {
           headers: { "x-access-token": user?.token ?? "missing-token" },
         });
 
@@ -79,7 +79,7 @@ const ExpenditureGeneralDetails = ({
     ["companies"],
     async () => {
       try {
-        const response = await axios.get<Company[] | []>(`${BACKEND_URL}/api/companies/`, {
+        const response = await axios.get<Company[] | []>(`${CONFIG.backendUrl}/api/companies/`, {
           headers: { "x-access-token": user?.token ?? "missing-token" },
         });
         return response.data ?? [];

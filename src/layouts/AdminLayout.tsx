@@ -1,4 +1,4 @@
-import SignOutButton from "../SignOutButton";
+import SignOutButton from "../components/SignOutButton";
 
 /**
  * TO BE IMPLEMENTED

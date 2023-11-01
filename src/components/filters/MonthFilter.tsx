@@ -1,5 +1,5 @@
 import ReactSelect from "react-select";
-import { CURRENT_MONTH, MONTHS } from "../helpers/utils";
+import { CURRENT_MONTH, MONTHS } from "../../utils/utils";
 import { capitalize } from "@mui/material";
 
 type MonthFilterProps = {
@@ -21,11 +21,7 @@ const MonthFilter = ({ onChange, options, defaultValue }: MonthFilterProps) => {
               return { label: capitalize(month), value: month };
             })
       }
-      defaultValue={
-        defaultValue
-          ? defaultValue
-          : { label: capitalize(CURRENT_MONTH), value: CURRENT_MONTH }
-      }
+      defaultValue={defaultValue ? defaultValue : { label: capitalize(CURRENT_MONTH), value: CURRENT_MONTH }}
       onChange={(newValue) => onChange(newValue ? newValue.value : "")}
       styles={{
         indicatorSeparator: (styles) => ({

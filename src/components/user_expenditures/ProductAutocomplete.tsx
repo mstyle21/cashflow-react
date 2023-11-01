@@ -1,10 +1,10 @@
 import { debounce } from "@mui/material";
 import { SetStateAction, useContext, useMemo, useState } from "react";
-import { BACKEND_URL } from "../../helpers/utils";
 import axios, { AxiosError } from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { Dropdown, FloatingLabel, Form } from "react-bootstrap";
 import { TApiProduct } from "../../pages/Product";
+import { CONFIG } from "../../config";
 
 const ProductAutocomplete = ({
   itemName,
@@ -22,9 +22,12 @@ const ProductAutocomplete = ({
     let options: string[] = [];
     if (value !== "" && value.length > 0) {
       try {
-        const response = await axios.get<TApiProduct[]>(`${BACKEND_URL}/api/products/autocomplete/?search=${value}`, {
-          headers: { "x-access-token": user?.token ?? "missing-token" },
-        });
+        const response = await axios.get<TApiProduct[]>(
+          `${CONFIG.backendUrl}/api/products/autocomplete/?search=${value}`,
+          {
+            headers: { "x-access-token": user?.token ?? "missing-token" },
+          }
+        );
 
         options = response.data.map((product) => product.name);
       } catch (e) {

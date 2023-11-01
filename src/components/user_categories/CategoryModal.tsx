@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
 import { TApiCategory } from "../../pages/Category";
-import { BACKEND_URL } from "../../helpers/utils";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
+import { CONFIG } from "../../config";
 
 type CategoryModalProps = {
   showModal: boolean;
@@ -23,7 +23,7 @@ const CategoryModal = ({ showModal, itemToEdit, parentCategories, closeModal }: 
       //edit
       axios
         .put(
-          `${BACKEND_URL}/api/categories/${itemToEdit.id}`,
+          `${CONFIG.backendUrl}/api/categories/${itemToEdit.id}`,
           { name, parentId },
           {
             headers: { "x-access-token": user?.token ?? "missing-token" },
@@ -39,7 +39,7 @@ const CategoryModal = ({ showModal, itemToEdit, parentCategories, closeModal }: 
       //create
       axios
         .post(
-          `${BACKEND_URL}/api/categories`,
+          `${CONFIG.backendUrl}/api/categories`,
           { name, parentId },
           {
             headers: { "x-access-token": user?.token ?? "missing-token" },

@@ -1,5 +1,5 @@
 import ReactSelect from "react-select";
-import { CURRENT_YEAR, arrayRange } from "../helpers/utils";
+import { CURRENT_YEAR, arrayRange } from "../../utils/utils";
 
 type YearFilterProps = {
   onChange: (arg: string) => void;
@@ -21,11 +21,7 @@ const YearFilter = ({ onChange, options, defaultValue }: YearFilterProps) => {
               return { label: year.toString(), value: year.toString() };
             })
       }
-      defaultValue={
-        defaultValue
-          ? defaultValue
-          : { label: CURRENT_YEAR.toString(), value: CURRENT_YEAR.toString() }
-      }
+      defaultValue={defaultValue ? defaultValue : { label: CURRENT_YEAR.toString(), value: CURRENT_YEAR.toString() }}
       onChange={(newValue) => onChange(newValue ? newValue.value : "")}
       styles={{
         indicatorSeparator: (styles) => ({

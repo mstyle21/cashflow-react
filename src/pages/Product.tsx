@@ -1,13 +1,13 @@
-import PageTitle from "../components/layout/PageTitle";
+import PageTitle from "../layouts/PageTitle";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../components/LoadingSpinner";
 import axios from "axios";
-import { BACKEND_URL, CURRENCY_SIGN } from "../helpers/utils";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Box } from "@mui/material";
 import { Accordion, FloatingLabel, Form, FormControl, Pagination } from "react-bootstrap";
 import { debounce } from "chart.js/helpers";
+import { CONFIG } from "../config";
 
 export type TApiProduct = {
   id: number;
@@ -28,6 +28,8 @@ export type TApiProductResponse = {
   pages: number;
 };
 
+//TODO: to be simplified, SOLID principle
+//TODO2: implement product`s expenditure details as: date, location and price
 const Product = () => {
   const { user } = useContext(AuthContext);
   const [search, setSearch] = useState("");
@@ -44,9 +46,12 @@ const Product = () => {
       };
 
       await axios
-        .get<TApiProductResponse>(`${BACKEND_URL}/api/products?search=${search}&page=${page}&perPage=${perPage}`, {
-          headers: { "x-access-token": user?.token ?? "missing-token" },
-        })
+        .get<TApiProductResponse>(
+          `${CONFIG.backendUrl}/api/products?search=${search}&page=${page}&perPage=${perPage}`,
+          {
+            headers: { "x-access-token": user?.token ?? "missing-token" },
+          }
+        )
         .then((response) => {
           products = response.data;
         })
@@ -123,7 +128,7 @@ const Product = () => {
                           {product.name} (<b>{product.expenditureItems.length}</b>)
                         </span>
                         <span>
-                          {totalSpendForProduct / 100} {CURRENCY_SIGN}
+                          {totalSpendForProduct / 100} {CONFIG.currency}
                         </span>
                       </Box>
                     </Accordion.Header>

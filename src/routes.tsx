@@ -1,11 +1,11 @@
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import AdminLayout from "./components/layout/AdminLayout";
+import AdminLayout from "./layouts/AdminLayout";
 import Category from "./pages/Category";
 import Dashboard from "./pages/Dashboard";
 import Expenditure from "./pages/Expenditure";
 import Login from "./pages/Login";
 import Product from "./pages/Product";
-import UserLayout from "./components/layout/UserLayout";
+import UserLayout from "./layouts/UserLayout";
 
 export const routes = [
   {

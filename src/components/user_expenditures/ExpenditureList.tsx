@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
-import { BACKEND_URL, CURRENCY_SIGN } from "../../helpers/utils";
 import moment from "moment";
+import { CONFIG } from "../../config";
 
 export type TApiExpenditure = {
   id: number;
@@ -43,7 +43,7 @@ const ExpenditureList = ({ expenditures, openModal }: ExpenditureListProps) => {
 
           const imgPath =
             expenditure.images.length > 0
-              ? `${BACKEND_URL}/${expenditure.id}/${expenditure.images[0].path}`
+              ? `${CONFIG.backendUrl}/${expenditure.id}/${expenditure.images[0].path}`
               : "/images/default.jpg";
 
           return (
@@ -63,7 +63,7 @@ const ExpenditureList = ({ expenditures, openModal }: ExpenditureListProps) => {
               <Box display="flex" justifyContent="space-between" width="100%" p="10px">
                 <Typography fontWeight="bold">{expenditure.company.name}</Typography>
                 <Typography fontWeight="bold">
-                  {expenditure.totalPrice / 100} {CURRENCY_SIGN}
+                  {expenditure.totalPrice / 100} {CONFIG.currency}
                 </Typography>
               </Box>
             </Box>

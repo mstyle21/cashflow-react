@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import styles from "./TopNavbar.module.css";
 import { Link } from "react-router-dom";
-import SignOutButton from "../SignOutButton";
+import SignOutButton from "../components/SignOutButton";
 
 const MENU_ITEMS = [
   { path: "/", name: "Dashboard" },

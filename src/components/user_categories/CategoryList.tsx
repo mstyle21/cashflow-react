@@ -4,9 +4,9 @@ import { Accordion } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { BACKEND_URL } from "../../helpers/utils";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { CONFIG } from "../../config";
 
 type CategoryListProps = {
   categories: TApiCategory[];
@@ -20,7 +20,7 @@ const CategoryList = ({ categories, editCategory, refreshList }: CategoryListPro
   const handleDeleteCategory = (category: TApiCategory) => {
     if (confirm(`Are you sure you want to delete category: ${category.name} ?`)) {
       axios
-        .delete(`${BACKEND_URL}/api/categories/${category.id}`, {
+        .delete(`${CONFIG.backendUrl}/api/categories/${category.id}`, {
           headers: { "x-access-token": user?.token ?? "missing-token" },
         })
         .then((response) => {

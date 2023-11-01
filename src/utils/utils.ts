@@ -14,8 +14,6 @@ export const MONTHS = [
 ];
 export const CURRENT_YEAR = new Date().getFullYear();
 export const CURRENT_MONTH = MONTHS[new Date().getMonth()];
-export const CURRENCY_SIGN = "RON";
-export const BACKEND_URL = "http://localhost:7000";
 export const COLORS = [
   "#4dc9f6",
   "#f67019",

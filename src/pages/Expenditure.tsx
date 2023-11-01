@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import ExpenditureList, { TApiExpenditure } from "../components/user_expenditures/ExpenditureList";
-import PageTitle from "../components/layout/PageTitle";
-import YearFilter from "../components/YearFilter";
-import MonthFilter from "../components/MonthFilter";
-import { BACKEND_URL, CURRENCY_SIGN, CURRENT_MONTH, CURRENT_YEAR, randomHash } from "../helpers/utils";
+import PageTitle from "../layouts/PageTitle";
+import YearFilter from "../components/filters/YearFilter";
+import MonthFilter from "../components/filters/MonthFilter";
+import { CURRENT_MONTH, CURRENT_YEAR, randomHash } from "../utils/utils";
 import useFetch from "../hooks/useFetch";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { isArray } from "chart.js/helpers";
@@ -14,6 +14,7 @@ import ExpenditureModal, {
 } from "../components/user_expenditures/ExpenditureModal";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
+import { CONFIG } from "../config";
 
 export type TEditableExpenditure = {
   id: number;
@@ -36,7 +37,7 @@ const Expenditure = () => {
     if (year) setYear(year);
   };
 
-  const API_URL = `${BACKEND_URL}/api/expenditures?month=${month}&year=${year}&${refreshHash}`;
+  const API_URL = `${CONFIG.backendUrl}/api/expenditures?month=${month}&year=${year}&${refreshHash}`;
 
   const { data, isLoading, error } = useFetch<TApiExpenditure[]>(API_URL);
 
@@ -103,7 +104,7 @@ const Expenditure = () => {
           <MonthFilter onChange={handleMonthChange} />
         </Box>
         <Typography fontWeight="bold" fontSize="24px" justifySelf="center">
-          Total paid: {paidValue / 100} {CURRENCY_SIGN}
+          Total paid: {paidValue / 100} {CONFIG.currency}
         </Typography>
         <Box justifySelf="end">
           <Button id="addNewExpenditure" onClick={handleAddExpenditure}>

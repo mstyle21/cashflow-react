@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
-import { BACKEND_URL, COLORS, CURRENCY_SIGN } from "../../helpers/utils";
+import { COLORS } from "../../utils/utils";
 import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../LoadingSpinner";
-import { TPeriodFilterItem } from "../PeriodFilter";
+import { TPeriodFilterItem } from "../filters/PeriodFilter";
 import { Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -20,8 +20,9 @@ import {
 
 import { isArray } from "chart.js/helpers";
 import { TApiCategory } from "../../pages/Category";
+import { CONFIG } from "../../config";
 
-const API_URL = `${BACKEND_URL}/api/categories/stats`;
+const API_URL = `${CONFIG.backendUrl}/api/categories/stats`;
 
 type TExpenditureItemsStats = {
   id: number;
@@ -82,7 +83,7 @@ const DashboardCategoryGraph = ({ organizedCategories, filters }: DashboardCateg
       tooltip: {
         callbacks: {
           label: (tooltipItem) => {
-            return `${tooltipItem.formattedValue} ${CURRENCY_SIGN}`;
+            return `${tooltipItem.formattedValue} ${CONFIG.currency}`;
           },
         },
       },
@@ -95,7 +96,7 @@ const DashboardCategoryGraph = ({ organizedCategories, filters }: DashboardCateg
     <>
       <Box>
         <Typography fontWeight="bold" fontSize="30px">
-          {totalSpent / 100} {CURRENCY_SIGN}
+          {totalSpent / 100} {CONFIG.currency}
         </Typography>
       </Box>
       <Box width="100%" height="300px">

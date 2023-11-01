@@ -5,7 +5,7 @@ import { Form } from "react-bootstrap";
 import { ELReducerAction, ExpenditureListItem } from "./ExpenditureModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faPlusCircle, faSave, faTrashAlt, faWarning } from "@fortawesome/free-solid-svg-icons";
-import { BACKEND_URL, CURRENCY_SIGN, randomHash } from "../../helpers/utils";
+import { randomHash } from "../../utils/utils";
 import { isNumber } from "chart.js/helpers";
 import ProductAutocomplete from "./ProductAutocomplete";
 import ReactSelect, { SingleValue } from "react-select";
@@ -14,6 +14,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import LoadingSpinner from "../LoadingSpinner";
 import { TApiCategory } from "../../pages/Category";
+import { CONFIG } from "../../config";
 
 type ExpenditureItemListProps = {
   totalPrice: number | "";
@@ -39,7 +40,7 @@ const ExpenditureItemList = ({ totalPrice, expenditureList, dispatch }: Expendit
     ["categories"],
     async () => {
       try {
-        const response = await axios.get<TApiCategory[]>(`${BACKEND_URL}/api/categories/?organized=true`, {
+        const response = await axios.get<TApiCategory[]>(`${CONFIG.backendUrl}/api/categories/?organized=true`, {
           headers: { "x-access-token": user?.token ?? "missing-token" },
         });
 
@@ -182,13 +183,13 @@ const ExpenditureItemList = ({ totalPrice, expenditureList, dispatch }: Expendit
               <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography fontWeight="bold">Price / unit</Typography>
                 <Typography>
-                  {pricePerUnit / 100} {CURRENCY_SIGN}
+                  {pricePerUnit / 100} {CONFIG.currency}
                 </Typography>
               </Box>
               <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography fontWeight="bold">Total price</Typography>
                 <Typography>
-                  {(quantity * pricePerUnit) / 100} {CURRENCY_SIGN}
+                  {(quantity * pricePerUnit) / 100} {CONFIG.currency}
                 </Typography>
               </Box>
               <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
@@ -226,10 +227,10 @@ const ExpenditureItemList = ({ totalPrice, expenditureList, dispatch }: Expendit
                     <span className="expenditure-item-quantity">{expenditureItem.quantity}</span>
                     <span className="expenditure-item-cross">x</span>
                     <span className="expenditure-item-ppu">
-                      {expenditureItem.pricePerUnit / 100} {CURRENCY_SIGN}
+                      {expenditureItem.pricePerUnit / 100} {CONFIG.currency}
                     </span>
                     <span className="expenditure-item-total">
-                      {(expenditureItem.quantity * expenditureItem.pricePerUnit) / 100} {CURRENCY_SIGN}
+                      {(expenditureItem.quantity * expenditureItem.pricePerUnit) / 100} {CONFIG.currency}
                     </span>
                     <FontAwesomeIcon
                       icon={faTrashAlt}
@@ -243,7 +244,7 @@ const ExpenditureItemList = ({ totalPrice, expenditureList, dispatch }: Expendit
             <Box display="flex" justifyContent="space-between" mt="10px">
               <span style={{ fontWeight: "bold" }}>Nr. items {expenditureList.length}</span>
               <span style={{ fontWeight: "bold" }}>
-                Items price: {itemsPrice / 100} {CURRENCY_SIGN}{" "}
+                Items price: {itemsPrice / 100} {CONFIG.currency}{" "}
                 {isNumber(totalPrice) && totalPrice === itemsPrice ? (
                   <FontAwesomeIcon icon={faCircleCheck} color="green" fontSize="20px" />
                 ) : (
