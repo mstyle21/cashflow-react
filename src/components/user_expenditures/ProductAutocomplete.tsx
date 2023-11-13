@@ -3,7 +3,7 @@ import { SetStateAction, useContext, useMemo, useState } from "react";
 import axios, { AxiosError } from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { Dropdown, FloatingLabel, Form } from "react-bootstrap";
-import { TApiProduct } from "../../pages/Product";
+import { TApiProduct } from "../../pages/user/ProductPage";
 import { CONFIG } from "../../config";
 
 const ProductAutocomplete = ({

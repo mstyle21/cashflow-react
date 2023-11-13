@@ -1,20 +1,20 @@
 import { Box, Typography } from "@mui/material";
-import ExpenditureList, { TApiExpenditure } from "../components/user_expenditures/ExpenditureList";
-import PageTitle from "../layouts/PageTitle";
-import YearFilter from "../components/filters/YearFilter";
-import MonthFilter from "../components/filters/MonthFilter";
-import { CURRENT_MONTH, CURRENT_YEAR, randomHash } from "../utils/utils";
-import useFetch from "../hooks/useFetch";
-import LoadingSpinner from "../components/LoadingSpinner";
+import ExpenditureList, { TApiExpenditure } from "../../components/user_expenditures/ExpenditureList";
+import PageTitle from "../../layouts/user/PageTitle";
+import YearFilter from "../../components/filters/YearFilter";
+import MonthFilter from "../../components/filters/MonthFilter";
+import { CURRENT_MONTH, CURRENT_YEAR, randomHash } from "../../utils/utils";
+import useFetch from "../../hooks/useFetch";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import { isArray } from "chart.js/helpers";
 import ExpenditureModal, {
   ExpenditureListItem,
   TExpenditureDetails,
   TExpenditureImage,
-} from "../components/user_expenditures/ExpenditureModal";
+} from "../../components/user_expenditures/ExpenditureModal";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
-import { CONFIG } from "../config";
+import { CONFIG } from "../../config";
 
 export type TEditableExpenditure = {
   id: number;
@@ -23,7 +23,7 @@ export type TEditableExpenditure = {
   images: TExpenditureImage[];
 };
 
-const Expenditure = () => {
+const ExpenditurePage = () => {
   const [month, setMonth] = useState(CURRENT_MONTH);
   const [year, setYear] = useState(CURRENT_YEAR.toString());
   const [modalShow, setModalShow] = useState(false);
@@ -125,4 +125,4 @@ const Expenditure = () => {
   );
 };
 
-export default Expenditure;
+export default ExpenditurePage;

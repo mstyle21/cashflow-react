@@ -13,7 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import LoadingSpinner from "../LoadingSpinner";
-import { TApiCategory } from "../../pages/Category";
+import { TApiCategory } from "../../pages/user/CategoryPage";
 import { CONFIG } from "../../config";
 
 type ExpenditureItemListProps = {

@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { TApiCategory } from "../../pages/Category";
+import { TApiCategory } from "../../pages/user/CategoryPage";
 import { Accordion } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";

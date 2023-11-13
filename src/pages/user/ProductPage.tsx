@@ -1,13 +1,13 @@
-import PageTitle from "../layouts/PageTitle";
+import PageTitle from "../../layouts/user/PageTitle";
 import { useQuery } from "@tanstack/react-query";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import axios from "axios";
 import { useContext, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import { Box } from "@mui/material";
 import { Accordion, FloatingLabel, Form, FormControl, Pagination } from "react-bootstrap";
 import { debounce } from "chart.js/helpers";
-import { CONFIG } from "../config";
+import { CONFIG } from "../../config";
 
 export type TApiProduct = {
   id: number;
@@ -30,7 +30,7 @@ export type TApiProductResponse = {
 
 //TODO: to be simplified, SOLID principle
 //TODO2: implement product`s expenditure details as: date, location and price
-const Product = () => {
+const ProductPage = () => {
   const { user } = useContext(AuthContext);
   const [search, setSearch] = useState("");
   const [perPage, setPerPage] = useState(10);
@@ -169,4 +169,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default ProductPage;

@@ -1,14 +1,14 @@
 import { Box } from "@mui/material";
-import PageTitle from "../layouts/PageTitle";
-import LoadingSpinner from "../components/LoadingSpinner";
+import PageTitle from "../../layouts/user/PageTitle";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import { Button } from "react-bootstrap";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useContext, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
-import CategoryList from "../components/user_categories/CategoryList";
-import CategoryModal from "../components/user_categories/CategoryModal";
-import { CONFIG } from "../config";
+import { AuthContext } from "../../context/AuthContext";
+import CategoryList from "../../components/user_categories/CategoryList";
+import CategoryModal from "../../components/user_categories/CategoryModal";
+import { CONFIG } from "../../config";
 
 export type TApiCategory = {
   id: number;
@@ -22,7 +22,7 @@ export type TApiCategory = {
   childs: TApiCategory[];
 };
 
-const Category = () => {
+const CategoryPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [itemToEdit, setItemToEdit] = useState<TApiCategory | null>(null);
 
@@ -95,4 +95,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default CategoryPage;

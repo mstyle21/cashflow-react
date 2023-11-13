@@ -5,7 +5,7 @@ import ExpenditureImageUpload from "./ExpenditureImageUpload";
 import ExpenditureItemList from "./ExpenditureItemList";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
-import { TEditableExpenditure } from "../../pages/Expenditure";
+import { TEditableExpenditure } from "../../pages/user/ExpenditurePage";
 import { CONFIG } from "../../config";
 
 export type TExpenditureDetails = {

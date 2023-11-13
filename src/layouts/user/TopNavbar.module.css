@@ -1,0 +1,67 @@
+.top_navbar {
+    background-color: #14213d;
+    position: sticky;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    padding: 16px;
+    color: #fff;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 0px 10px #14213d;
+}
+.link_navbar {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+}
+.link_navbar a {
+    padding: 0 10px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+.account_menu_container {
+    position: relative;
+}
+.account_icon {
+    cursor: pointer;
+}
+.account_menu_container:hover .account_menu {
+    display: block;
+}
+.account_menu {
+    display: none;
+    position: absolute;
+    top: 150%;
+    right: -10px;
+    width: 150px;
+    background-color: #14213d;
+    border: 1px solid rgb(136, 138, 141);
+}
+.account_menu::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: var(--phoenix-black);
+    top: -11px;
+    right: 6px;
+    transform: rotate(45deg);
+    background: var(--phoenix-white);
+    background: inherit;
+    border-top-left-radius: 4px;
+    border-width: 1px 0 0 1px;
+    border-style: solid;
+    border-color: var(--phoenix-gray-300);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+.account_menu button {
+    background: transparent;
+    border: none;
+    color: white;
+    width: 100%;
+}

@@ -19,7 +19,7 @@ import {
 } from "chart.js";
 
 import { isArray } from "chart.js/helpers";
-import { TApiCategory } from "../../pages/Category";
+import { TApiCategory } from "../../pages/user/CategoryPage";
 import { CONFIG } from "../../config";
 
 const API_URL = `${CONFIG.backendUrl}/api/categories/stats`;

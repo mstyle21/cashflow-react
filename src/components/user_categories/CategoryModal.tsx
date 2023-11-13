@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
-import { TApiCategory } from "../../pages/Category";
+import { TApiCategory } from "../../pages/user/CategoryPage";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { CONFIG } from "../../config";

@@ -1,7 +1,9 @@
 import { Box } from "@mui/material";
 import styles from "./TopNavbar.module.css";
 import { Link } from "react-router-dom";
-import SignOutButton from "../components/SignOutButton";
+import SignOutButton from "../../components/SignOutButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 const MENU_ITEMS = [
   { path: "/", name: "Dashboard" },
@@ -25,11 +27,22 @@ function LinkNavbar() {
   );
 }
 
-export function LinkLogo() {
+function LinkLogo() {
   return (
     <Link to="/">
       <img height="50px" src="/images/logo.png" />
     </Link>
+  );
+}
+
+function AccountMenu() {
+  return (
+    <div className={styles.account_menu_container}>
+      <FontAwesomeIcon icon={faUser} size="xl" className={styles.account_icon} />
+      <div className={styles.account_menu}>
+        <SignOutButton />
+      </div>
+    </div>
   );
 }
 
@@ -39,7 +52,7 @@ export default function TopNavbar() {
       <Box display="flex" justifyContent="space-between" alignItems="center" className="cf-container">
         <LinkLogo />
         <LinkNavbar />
-        <SignOutButton />
+        <AccountMenu />
       </Box>
     </header>
   );

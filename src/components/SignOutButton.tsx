@@ -4,5 +4,9 @@ import { AuthContext } from "../context/AuthContext";
 export default function SignOutButton() {
   const { logout } = useContext(AuthContext);
 
-  return <button onClick={() => logout()}>Sign out</button>;
+  return (
+    <button className="sign-out" onClick={() => logout()}>
+      Sign out
+    </button>
+  );
 }

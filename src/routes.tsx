@@ -1,11 +1,15 @@
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import AdminLayout from "./layouts/AdminLayout";
-import Category from "./pages/Category";
-import Dashboard from "./pages/Dashboard";
-import Expenditure from "./pages/Expenditure";
 import Login from "./pages/Login";
-import Product from "./pages/Product";
-import UserLayout from "./layouts/UserLayout";
+import AdminLayout from "./layouts/admin/AdminLayout";
+import { default as AdminDashboard } from "./pages/admin/DashboardPage";
+import { default as AdminCategories } from "./pages/admin/CategoryPage";
+import { default as AdminProducts } from "./pages/admin/ProductPage";
+import { default as UserList } from "./pages/admin/UserPage";
+import UserLayout from "./layouts/user/UserLayout";
+import DashboardPage from "./pages/user/DashboardPage";
+import ExpenditurePage from "./pages/user/ExpenditurePage";
+import CategoryPage from "./pages/user/CategoryPage";
+import ProductPage from "./pages/user/ProductPage";
 
 export const routes = [
   {
@@ -19,19 +23,19 @@ export const routes = [
     children: [
       {
         index: true,
-        element: <Dashboard />,
+        element: <DashboardPage />,
       },
       {
         path: "expenditures",
-        element: <Expenditure />,
+        element: <ExpenditurePage />,
       },
       {
         path: "categories",
-        element: <Category />,
+        element: <CategoryPage />,
       },
       {
         path: "products",
-        element: <Product />,
+        element: <ProductPage />,
       },
       {
         path: "*",
@@ -48,6 +52,25 @@ export const routes = [
         <AdminLayout />
       </ProtectedRoute>
     ),
+    children: [
+      {
+        index: true,
+        path: "dashboard",
+        element: <AdminDashboard />,
+      },
+      {
+        path: "categories",
+        element: <AdminCategories />,
+      },
+      {
+        path: "products",
+        element: <AdminProducts />,
+      },
+      {
+        path: "users",
+        element: <UserList />,
+      },
+    ],
   },
   {
     path: "/login",
