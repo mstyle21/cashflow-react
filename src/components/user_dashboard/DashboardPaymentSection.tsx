@@ -3,7 +3,7 @@ import PeriodFilter, { TPeriodFilterItem } from "../filters/PeriodFilter";
 import DashbordCardLogo from "./DashbordCardLogo";
 import { useState } from "react";
 import DashboardPaymentGraph from "./DashboardPaymentGraph";
-import { CURRENT_MONTH, CURRENT_YEAR } from "../../utils/utils";
+import { CURRENT_MONTH, CURRENT_YEAR } from "../../utils";
 
 const DashboardPaymentSection = () => {
   const [periodFilters, setPeriodFilters] = useState<TPeriodFilterItem>({

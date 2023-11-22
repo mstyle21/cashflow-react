@@ -8,19 +8,8 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import CategoryList from "../../components/user_categories/CategoryList";
 import CategoryModal from "../../components/user_categories/CategoryModal";
-import { CONFIG } from "../../config";
-
-export type TApiCategory = {
-  id: number;
-  name: string;
-  created: string;
-  updated: string;
-  parent: {
-    id: number;
-    name: string;
-  } | null;
-  childs: TApiCategory[];
-};
+import { TApiCategory } from "../../types";
+import { BACKEND_URL } from "../../config";
 
 const CategoryPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -34,7 +23,7 @@ const CategoryPage = () => {
     queryFn: async () => {
       let categories: TApiCategory[] = [];
       try {
-        const response = await axios.get<TApiCategory[]>(`${CONFIG.backendUrl}/api/categories?organized=true`, {
+        const response = await axios.get<TApiCategory[]>(`${BACKEND_URL}/api/categories?organized=true`, {
           headers: { "x-access-token": user?.token ?? "missing-token" },
         });
         categories = response.data;

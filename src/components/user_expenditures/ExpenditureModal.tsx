@@ -3,92 +3,11 @@ import { Button, Modal } from "react-bootstrap";
 import ExpenditureGeneralDetails from "./ExpenditureGeneralDetails";
 import ExpenditureImageUpload from "./ExpenditureImageUpload";
 import ExpenditureItemList from "./ExpenditureItemList";
-import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
-import { TEditableExpenditure } from "../../pages/user/ExpenditurePage";
-import { CONFIG } from "../../config";
-
-export type TExpenditureDetails = {
-  date: Date | null;
-  totalPrice: number | "";
-  company: string | null;
-  location: number | null;
-  settlement: "none" | "total" | "partial";
-};
-
-export type ExpenditureListItem = {
-  hash: string;
-  name: string;
-  quantity: number;
-  pricePerUnit: number;
-  category: number;
-};
-export type ELReducerAction =
-  | {
-      type: "add_item" | "edit_item" | "delete_item";
-      payload: ExpenditureListItem;
-    }
-  | { type: "reset" }
-  | { type: "add_items"; payload: ExpenditureListItem[] };
-function expenditureListReducer(state: ExpenditureListItem[], action: ELReducerAction) {
-  switch (action.type) {
-    case "add_item":
-      return [...state, action.payload];
-    case "edit_item":
-      if (state.find((item) => item.hash === action.payload.hash)) {
-        return state.map((item) => {
-          return item.hash === action.payload.hash ? action.payload : item;
-        });
-      } else {
-        return [...state, action.payload];
-      }
-    case "delete_item":
-      return state.filter((item) => item.hash !== action.payload.hash);
-    case "reset":
-      return [];
-    case "add_items":
-      return [...state, ...action.payload];
-    default:
-      return state;
-  }
-}
-
-export type TExpenditureImage = {
-  hash: string;
-  path: string;
-  expenditureId?: number;
-  file?: File;
-};
-export type EIReducerAction =
-  | {
-      type: "add_item";
-      payload: TExpenditureImage | TExpenditureImage[];
-    }
-  | {
-      type: "delete_item";
-      payload: TExpenditureImage;
-    }
-  | { type: "reset" }
-  | { type: "add_items"; payload: TExpenditureImage[] };
-
-function expenditureImagesReducer(state: TExpenditureImage[], action: EIReducerAction) {
-  switch (action.type) {
-    case "add_item":
-      if (Array.isArray(action.payload)) {
-        return [...state, ...action.payload];
-      } else {
-        return [...state, action.payload];
-      }
-    case "delete_item":
-      return state.filter((item) => item.hash !== action.payload.hash);
-    case "reset":
-      return [];
-    case "add_items":
-      return [...state, ...action.payload];
-    default:
-      return state;
-  }
-}
+import { TExpenditureDetails, TEditableExpenditure } from "../../types";
+import { BACKEND_URL } from "../../config";
+import { axiosInstance, setAccessToken } from "../../services/AxiosService";
+import { expenditureListReducer, expenditureImagesReducer } from "../../reducers/expenditureReducer";
 
 const initialItem: TExpenditureDetails = {
   date: new Date(),
@@ -157,37 +76,25 @@ const ExpenditureModal = ({ show, setShow, closeModalAndRefresh, itemToEdit }: E
       }
     }
 
-    if (itemToEdit) {
-      //edit
-      axios
-        .put(`${CONFIG.backendUrl}/api/expenditures/${itemToEdit.id}`, formData, {
-          headers: { "x-access-token": user?.token ?? "missing-token" },
-        })
-        .then((response) => {
-          if (response.status === 201) {
-            resetModal();
-            closeModalAndRefresh();
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      //create
-      axios
-        .post(`${CONFIG.backendUrl}/api/expenditures`, formData, {
-          headers: { "x-access-token": user?.token ?? "missing-token" },
-        })
-        .then((response) => {
-          if (response.status === 201) {
-            resetModal();
-            closeModalAndRefresh();
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
+    setAccessToken(user?.token ?? "missing-token");
+    axiosInstance
+      .request({
+        url: `${BACKEND_URL}/api/expenditures/${itemToEdit ? itemToEdit.id : ""}`,
+        method: itemToEdit ? "put" : "post",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          resetModal();
+          closeModalAndRefresh();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (

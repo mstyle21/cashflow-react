@@ -5,28 +5,11 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Box } from "@mui/material";
-import { Accordion, FloatingLabel, Form, FormControl, Pagination } from "react-bootstrap";
+import { Accordion, FloatingLabel, Form, FormControl } from "react-bootstrap";
 import { debounce } from "chart.js/helpers";
-import { CONFIG } from "../../config";
-
-export type TApiProduct = {
-  id: number;
-  name: string;
-  description: string;
-  expenditureItems: {
-    quantity: number;
-    pricePerUnit: number;
-    totalPrice: number;
-    expenditure: {
-      purchaseDate: string;
-    };
-  }[];
-};
-export type TApiProductResponse = {
-  items: TApiProduct[];
-  count: number;
-  pages: number;
-};
+import { TApiProductResponse } from "../../types";
+import { BACKEND_URL, CURRENCY_SIGN } from "../../config";
+import Paginator from "../../components/Paginator";
 
 //TODO: to be simplified, SOLID principle
 //TODO2: implement product`s expenditure details as: date, location and price
@@ -46,12 +29,9 @@ const ProductPage = () => {
       };
 
       await axios
-        .get<TApiProductResponse>(
-          `${CONFIG.backendUrl}/api/products?search=${search}&page=${page}&perPage=${perPage}`,
-          {
-            headers: { "x-access-token": user?.token ?? "missing-token" },
-          }
-        )
+        .get<TApiProductResponse>(`${BACKEND_URL}/api/products?search=${search}&page=${page}&perPage=${perPage}`, {
+          headers: { "x-access-token": user?.token ?? "missing-token" },
+        })
         .then((response) => {
           products = response.data;
         })
@@ -65,20 +45,6 @@ const ProductPage = () => {
   });
 
   const handleInputSearch = debounce((value) => setSearch(value), 500);
-
-  const paginationItems = [];
-  const paginationRange = 2;
-  if (data && data.pages > 1) {
-    for (let nr = 2; nr < data.pages; nr++) {
-      if (nr >= page - paginationRange && nr <= page + paginationRange) {
-        paginationItems.push(
-          <Pagination.Item key={nr} active={nr === page} onClick={() => setPage(nr)}>
-            {nr}
-          </Pagination.Item>
-        );
-      }
-    }
-  }
 
   return (
     <div className="page-wrapper">
@@ -128,7 +94,7 @@ const ProductPage = () => {
                           {product.name} (<b>{product.expenditureItems.length}</b>)
                         </span>
                         <span>
-                          {totalSpendForProduct / 100} {CONFIG.currency}
+                          {totalSpendForProduct / 100} {CURRENCY_SIGN}
                         </span>
                       </Box>
                     </Accordion.Header>
@@ -139,29 +105,7 @@ const ProductPage = () => {
             })}
           </Box>
           <Box display="flex" justifyContent="center" mt="50px">
-            <Pagination style={{ gap: "10px" }}>
-              {page > 1 && (
-                <>
-                  <Pagination.Prev onClick={() => setPage((prev) => prev - 1)} />
-                </>
-              )}
-              <Pagination.Item active={page === 1} onClick={() => setPage(1)}>
-                1
-              </Pagination.Item>
-              {page > 2 + paginationRange && <Pagination.Ellipsis disabled />}
-              {paginationItems}
-              {page < data.pages - paginationRange - 1 && <Pagination.Ellipsis disabled />}
-              {data.pages > 1 && (
-                <Pagination.Item active={page === data.pages} onClick={() => setPage(data.pages)}>
-                  {data.pages}
-                </Pagination.Item>
-              )}
-              {page < data.pages && (
-                <>
-                  <Pagination.Next onClick={() => setPage((prev) => prev + 1)} />
-                </>
-              )}
-            </Pagination>
+            <Paginator page={page} pages={data.pages} handlePageChange={setPage} />
           </Box>
         </>
       )}

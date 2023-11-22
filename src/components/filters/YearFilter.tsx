@@ -1,5 +1,5 @@
 import ReactSelect from "react-select";
-import { CURRENT_YEAR, arrayRange } from "../../utils/utils";
+import { CURRENT_YEAR, arrayRange } from "../../utils";
 
 type YearFilterProps = {
   onChange: (arg: string) => void;

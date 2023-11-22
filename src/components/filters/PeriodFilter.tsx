@@ -4,7 +4,7 @@ import { Box, capitalize } from "@mui/material";
 import React, { ReactNode, useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import ReactSelect from "react-select";
-import { CURRENT_MONTH, CURRENT_YEAR } from "../../utils/utils";
+import { CURRENT_MONTH, CURRENT_YEAR } from "../../utils";
 
 type PeriodFilterProps = {
   setPeriodFilters: React.Dispatch<React.SetStateAction<TPeriodFilterItem>>;

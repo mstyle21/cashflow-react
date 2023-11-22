@@ -1,27 +1,17 @@
 import { Box, Typography } from "@mui/material";
-import ExpenditureList, { TApiExpenditure } from "../../components/user_expenditures/ExpenditureList";
+import ExpenditureList from "../../components/user_expenditures/ExpenditureList";
 import PageTitle from "../../layouts/user/PageTitle";
 import YearFilter from "../../components/filters/YearFilter";
 import MonthFilter from "../../components/filters/MonthFilter";
-import { CURRENT_MONTH, CURRENT_YEAR, randomHash } from "../../utils/utils";
+import { CURRENT_MONTH, CURRENT_YEAR, randomHash } from "../../utils";
 import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { isArray } from "chart.js/helpers";
-import ExpenditureModal, {
-  ExpenditureListItem,
-  TExpenditureDetails,
-  TExpenditureImage,
-} from "../../components/user_expenditures/ExpenditureModal";
+import ExpenditureModal from "../../components/user_expenditures/ExpenditureModal";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
-import { CONFIG } from "../../config";
-
-export type TEditableExpenditure = {
-  id: number;
-  generalDetails: TExpenditureDetails;
-  items: ExpenditureListItem[];
-  images: TExpenditureImage[];
-};
+import { TApiExpenditure, TEditableExpenditure } from "../../types";
+import { BACKEND_URL, CURRENCY_SIGN } from "../../config";
 
 const ExpenditurePage = () => {
   const [month, setMonth] = useState(CURRENT_MONTH);
@@ -37,7 +27,7 @@ const ExpenditurePage = () => {
     if (year) setYear(year);
   };
 
-  const API_URL = `${CONFIG.backendUrl}/api/expenditures?month=${month}&year=${year}&${refreshHash}`;
+  const API_URL = `${BACKEND_URL}/api/expenditures?month=${month}&year=${year}&${refreshHash}`;
 
   const { data, isLoading, error } = useFetch<TApiExpenditure[]>(API_URL);
 
@@ -104,7 +94,7 @@ const ExpenditurePage = () => {
           <MonthFilter onChange={handleMonthChange} />
         </Box>
         <Typography fontWeight="bold" fontSize="24px" justifySelf="center">
-          Total paid: {paidValue / 100} {CONFIG.currency}
+          Total paid: {paidValue / 100} {CURRENCY_SIGN}
         </Typography>
         <Box justifySelf="end">
           <Button id="addNewExpenditure" onClick={handleAddExpenditure}>

@@ -14,19 +14,19 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import LoadingSpinner from "../LoadingSpinner";
-import { CURRENT_YEAR, MONTHS } from "../../utils/utils";
+import { CURRENT_YEAR, MONTHS } from "../../utils";
 import { TPeriodFilterItem } from "../filters/PeriodFilter";
 import { isArray } from "chart.js/helpers";
 import moment from "moment";
-import { CONFIG } from "../../config";
+import { BACKEND_URL, CURRENCY_SIGN } from "../../config";
 
-const API_URL = `${CONFIG.backendUrl}/api/expenditures/stats`;
+const API_URL = `${BACKEND_URL}/api/expenditures/stats`;
 
-interface TExpenditureStats {
+type TExpenditureStats = {
   id: number;
   totalPrice: number;
   purchaseDate: string;
-}
+};
 
 type DashboardPaymentGraphProps = {
   filters: TPeriodFilterItem;
@@ -86,7 +86,7 @@ const DashboardPaymentGraph = ({ filters }: DashboardPaymentGraphProps) => {
       tooltip: {
         callbacks: {
           label: (tooltipItem) => {
-            return `${tooltipItem.formattedValue} ${CONFIG.currency}`;
+            return `${tooltipItem.formattedValue} ${CURRENCY_SIGN}`;
           },
         },
       },
@@ -102,7 +102,7 @@ const DashboardPaymentGraph = ({ filters }: DashboardPaymentGraphProps) => {
         min: Math.min(...dataValues),
         ticks: {
           callback: (tickValue: string | number) => {
-            return `${tickValue} ${CONFIG.currency}`;
+            return `${tickValue} ${CURRENCY_SIGN}`;
           },
         },
       },
@@ -115,7 +115,7 @@ const DashboardPaymentGraph = ({ filters }: DashboardPaymentGraphProps) => {
     <>
       <Box>
         <Typography fontWeight="bold" fontSize="30px">
-          {totalSpent / 100} {CONFIG.currency}
+          {totalSpent / 100} {CURRENCY_SIGN}
         </Typography>
       </Box>
       <Box width="100%" height="300px">

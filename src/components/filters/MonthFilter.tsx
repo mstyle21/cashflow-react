@@ -1,5 +1,5 @@
 import ReactSelect from "react-select";
-import { CURRENT_MONTH, MONTHS } from "../../utils/utils";
+import { CURRENT_MONTH, MONTHS } from "../../utils";
 import { capitalize } from "@mui/material";
 
 type MonthFilterProps = {

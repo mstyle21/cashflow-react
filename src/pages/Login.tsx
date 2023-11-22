@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { CONFIG } from "../config";
+import { BACKEND_URL } from "../config";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -19,7 +19,7 @@ export default function Login() {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      await fetch(`${CONFIG.backendUrl}/api/user/login`, {
+      await fetch(`${BACKEND_URL}/api/user/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

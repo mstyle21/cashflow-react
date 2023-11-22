@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
 import { TApiCategory } from "../../pages/user/CategoryPage";
-import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
-import { CONFIG } from "../../config";
+import { BACKEND_URL } from "../../config";
+import { axiosInstance, setAccessToken } from "../../services/AxiosService";
 
 type CategoryModalProps = {
   showModal: boolean;
@@ -19,39 +19,22 @@ const CategoryModal = ({ showModal, itemToEdit, parentCategories, closeModal }: 
   const { user } = useContext(AuthContext);
 
   const handleSaveCategory = () => {
-    if (itemToEdit) {
-      //edit
-      axios
-        .put(
-          `${CONFIG.backendUrl}/api/categories/${itemToEdit.id}`,
-          { name, parentId },
-          {
-            headers: { "x-access-token": user?.token ?? "missing-token" },
-          }
-        )
-        .then((response) => {
-          if (response.status === 201) {
-            closeModal(true);
-          }
-        })
-        .catch((error) => console.error(error));
-    } else {
-      //create
-      axios
-        .post(
-          `${CONFIG.backendUrl}/api/categories`,
-          { name, parentId },
-          {
-            headers: { "x-access-token": user?.token ?? "missing-token" },
-          }
-        )
-        .then((response) => {
-          if (response.status === 201) {
-            closeModal(true);
-          }
-        })
-        .catch((error) => console.error(error));
-    }
+    setAccessToken(user?.token ?? "missing-token");
+
+    const data = { name, parentId };
+
+    axiosInstance
+      .request({
+        method: itemToEdit ? "put" : "post",
+        data: data,
+        url: `${BACKEND_URL}/api/categories/${itemToEdit ? itemToEdit.id : ""}`,
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          closeModal(true);
+        }
+      })
+      .catch((error) => console.error(error));
   };
 
   return (

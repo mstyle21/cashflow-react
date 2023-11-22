@@ -8,9 +8,9 @@ import DatePicker from "react-datepicker";
 import AsyncCreatableSelect from "react-select/async-creatable";
 import ReactSelect from "react-select";
 import LoadingSpinner from "../LoadingSpinner";
-import { TExpenditureDetails } from "./ExpenditureModal";
 import { isNumber } from "chart.js/helpers";
-import { CONFIG } from "../../config";
+import { TExpenditureDetails } from "../../types";
+import { BACKEND_URL } from "../../config";
 
 type Company = {
   id: number;
@@ -18,6 +18,7 @@ type Company = {
   created: Date;
   updated: Date | null;
 };
+
 type SelectOption = {
   label: string;
   value: string;
@@ -44,7 +45,7 @@ const ExpenditureGeneralDetails = ({
       let list: SelectOption[] | [] = [];
       let defaultOption: SelectOption | object = {};
       try {
-        const response = await axios.get<Company[]>(`${CONFIG.backendUrl}/api/cities/`, {
+        const response = await axios.get<Company[]>(`${BACKEND_URL}/api/cities/`, {
           headers: { "x-access-token": user?.token ?? "missing-token" },
         });
 
@@ -79,7 +80,7 @@ const ExpenditureGeneralDetails = ({
     ["companies"],
     async () => {
       try {
-        const response = await axios.get<Company[] | []>(`${CONFIG.backendUrl}/api/companies/`, {
+        const response = await axios.get<Company[] | []>(`${BACKEND_URL}/api/companies/`, {
           headers: { "x-access-token": user?.token ?? "missing-token" },
         });
         return response.data ?? [];
