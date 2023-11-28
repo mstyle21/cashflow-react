@@ -19,8 +19,8 @@ import {
 } from "chart.js";
 
 import { isArray } from "chart.js/helpers";
-import { TApiCategory } from "../../pages/user/CategoryPage";
 import { BACKEND_URL, CURRENCY_SIGN } from "../../config";
+import { TApiCategory } from "../../types";
 
 const API_URL = `${BACKEND_URL}/api/categories/stats`;
 
