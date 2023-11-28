@@ -31,7 +31,7 @@ export default function useFetch<T = unknown>(url: string, options?: RequestInit
           })
           .catch((error: TypeError) => {
             if (error.name === "AbortError") {
-              console.error(error);
+              // do nothing
             } else {
               if (error.message.includes("Token expired!")) {
                 const redirectPath = window.location.pathname !== "/login" ? window.location.pathname : undefined;
