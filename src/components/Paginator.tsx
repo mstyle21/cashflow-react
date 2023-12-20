@@ -19,6 +19,8 @@ const Paginator = ({ page, pages, handlePageChange }: PaginatorProps) => {
         );
       }
     }
+  } else {
+    return <></>;
   }
 
   return (

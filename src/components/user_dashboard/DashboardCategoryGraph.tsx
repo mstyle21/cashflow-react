@@ -23,6 +23,7 @@ import { BACKEND_URL, CURRENCY_SIGN } from "../../config";
 import { TApiCategory } from "../../types";
 
 const API_URL = `${BACKEND_URL}/api/categories/stats`;
+console.log(API_URL);
 
 type TExpenditureItemsStats = {
   id: number;

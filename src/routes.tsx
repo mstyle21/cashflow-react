@@ -1,15 +1,18 @@
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import Login from "./pages/Login";
-import AdminLayout from "./layouts/admin/AdminLayout";
-import { default as AdminDashboard } from "./pages/admin/DashboardPage";
-import { default as AdminCategories } from "./pages/admin/CategoryPage";
-import { default as AdminProducts } from "./pages/admin/ProductPage";
-import { default as UserList } from "./pages/admin/UserPage";
-import UserLayout from "./layouts/user/UserLayout";
-import DashboardPage from "./pages/user/DashboardPage";
-import ExpenditurePage from "./pages/user/ExpenditurePage";
-import CategoryPage from "./pages/user/CategoryPage";
-import ProductPage from "./pages/user/ProductPage";
+import { lazy } from "react";
+
+const UserLayout = lazy(() => import("./layouts/user/UserLayout"));
+const DashboardPage = lazy(() => import("./pages/user/DashboardPage"));
+const ExpenditurePage = lazy(() => import("./pages/user/ExpenditurePage"));
+const CategoryPage = lazy(() => import("./pages/user/CategoryPage"));
+const ProductPage = lazy(() => import("./pages/user/ProductPage"));
+
+const AdminLayout = lazy(() => import("./layouts/admin/AdminLayout"));
+const AdminDashboard = lazy(() => import("./pages/admin/DashboardPage"));
+const AdminCategories = lazy(() => import("./pages/admin/CategoryPage"));
+const AdminProducts = lazy(() => import("./pages/admin/ProductPage"));
+const UserList = lazy(() => import("./pages/admin/UserPage"));
 
 export const routes = [
   {

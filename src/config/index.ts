@@ -1,2 +1,2 @@
-export const BACKEND_URL = "http://192.168.100.26:7000";
-export const CURRENCY_SIGN = "RON";
+export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+export const CURRENCY_SIGN = import.meta.env.VITE_CURRENCY_SIGN;
