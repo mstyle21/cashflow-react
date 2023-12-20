@@ -1,5 +1,4 @@
 import { Box, Typography, capitalize } from "@mui/material";
-import useFetch from "../../hooks/useFetch";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,14 +12,13 @@ import {
   ChartData,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import LoadingSpinner from "../LoadingSpinner";
-import { CURRENT_YEAR, MONTHS } from "../../utils";
-import { TPeriodFilterItem } from "../filters/PeriodFilter";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import { CURRENT_YEAR, MONTHS } from "../../../utils";
+import { TPeriodFilterItem } from "../../../components/filters/PeriodFilter";
 import { isArray } from "chart.js/helpers";
 import moment from "moment";
-import { BACKEND_URL, CURRENCY_SIGN } from "../../config";
-
-const API_URL = `${BACKEND_URL}/api/expenditures/stats`;
+import { CURRENCY_SIGN } from "../../../config";
+import { useUserExpenditureStats } from "../../../api/getUserExpenditureStats";
 
 type TExpenditureStats = {
   id: number;
@@ -33,18 +31,12 @@ type DashboardPaymentGraphProps = {
 };
 
 const DashboardPaymentGraph = ({ filters }: DashboardPaymentGraphProps) => {
-  const { data, isLoading, error } = useFetch<TExpenditureStats[]>(
-    `${API_URL}?month=${filters.value.month}&year=${filters.value.year}&type=${filters.type}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const { data, error, isLoading } = useUserExpenditureStats({
+    filters: `month=${filters.value.month}&year=${filters.value.year}&type=${filters.type}`,
+  });
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="alert alert-danger">Something went wrong.</div>;
   }
   if (isLoading) {
     return <LoadingSpinner />;

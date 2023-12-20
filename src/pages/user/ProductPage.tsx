@@ -41,7 +41,6 @@ const ProductPage = () => {
 
       return products;
     },
-    keepPreviousData: true,
   });
 
   const handleInputSearch = debounce((value) => setSearch(value), 500);

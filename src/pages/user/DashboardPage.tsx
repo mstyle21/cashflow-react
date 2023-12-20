@@ -1,6 +1,6 @@
-import DashboardCategorySection from "../../components/user_dashboard/DashboardCategorySection";
+import DashboardCategorySection from "../../features/user_dashboard/components/DashboardCategorySection";
 import PageTitle from "../../layouts/user/PageTitle";
-import DashboardPaymentSection from "../../components/user_dashboard/DashboardPaymentSection";
+import DashboardPaymentSection from "../../features/user_dashboard/components/DashboardPaymentSection";
 
 const DashboardPage = () => {
   return (

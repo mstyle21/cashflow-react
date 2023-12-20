@@ -1,16 +1,11 @@
 import { Box } from "@mui/material";
-import PeriodFilter, { TPeriodFilterItem } from "../filters/PeriodFilter";
+import PeriodFilter, { TPeriodFilterItem } from "../../../components/filters/PeriodFilter";
 import DashbordCardLogo from "./DashbordCardLogo";
-import { useContext, useState } from "react";
-import { CURRENT_MONTH, CURRENT_YEAR } from "../../utils";
+import { useState } from "react";
+import { CURRENT_MONTH, CURRENT_YEAR } from "../../../utils";
 import DashboardCategoryGraph from "./DashboardCategoryGraph";
-import MainCategoryFilter from "../filters/MainCategoryFilter";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { AuthContext } from "../../context/AuthContext";
-import LoadingSpinner from "../LoadingSpinner";
-import { TApiCategory } from "../../pages/user/CategoryPage";
-import { BACKEND_URL } from "../../config";
+import MainCategoryFilter from "../../../components/filters/MainCategoryFilter";
+import { useUserCategories } from "../../../api/getUserCategories";
 
 const DashboardCategorySection = () => {
   const [periodFilters, setPeriodFilters] = useState<TPeriodFilterItem>({
@@ -23,38 +18,11 @@ const DashboardCategorySection = () => {
   });
   const [activeCategory, setActiveCategory] = useState(0);
 
-  const { user } = useContext(AuthContext);
-
-  const {
-    isLoading: loadingCategories,
-    error: errorCategories,
-    data: organizedCategories,
-  } = useQuery(
-    ["categories"],
-    async () => {
-      try {
-        const response = await axios.get<TApiCategory[]>(`${BACKEND_URL}/api/categories/?organized=true`, {
-          headers: { "x-access-token": user?.token ?? "missing-token" },
-        });
-
-        return response.data ?? [];
-      } catch (error) {
-        console.error(error);
-      }
-
-      return [];
-    },
-    {
-      staleTime: 300000,
-    }
-  );
-
-  if (loadingCategories) return <LoadingSpinner />;
-  if (errorCategories) return <div className="alert alert-danger">Something went wrong</div>;
-
   const mainCategories: { [id: number]: string } = {
     0: "All categories",
   };
+
+  const { categories: organizedCategories } = useUserCategories({});
   if (organizedCategories) {
     organizedCategories.map((category) => {
       if (category.parent === null) {
@@ -62,8 +30,6 @@ const DashboardCategorySection = () => {
       }
     });
   }
-
-  const categoryFilters = { ...periodFilters, categoryId: activeCategory };
 
   return (
     <section className="dashboard-card">
@@ -82,7 +48,7 @@ const DashboardCategorySection = () => {
         <DashboardCategoryGraph
           key={activeCategory}
           organizedCategories={organizedCategories ?? []}
-          filters={categoryFilters}
+          filters={{ ...periodFilters, categoryId: activeCategory }}
         />
       </Box>
     </section>

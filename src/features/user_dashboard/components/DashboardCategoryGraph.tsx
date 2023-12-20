@@ -1,8 +1,7 @@
 import { Box, Typography } from "@mui/material";
-import { COLORS } from "../../utils";
-import useFetch from "../../hooks/useFetch";
-import LoadingSpinner from "../LoadingSpinner";
-import { TPeriodFilterItem } from "../filters/PeriodFilter";
+import { COLORS } from "../../../utils";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import { TPeriodFilterItem } from "../../../components/filters/PeriodFilter";
 import { Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -19,11 +18,9 @@ import {
 } from "chart.js";
 
 import { isArray } from "chart.js/helpers";
-import { BACKEND_URL, CURRENCY_SIGN } from "../../config";
-import { TApiCategory } from "../../types";
-
-const API_URL = `${BACKEND_URL}/api/categories/stats`;
-console.log(API_URL);
+import { CURRENCY_SIGN } from "../../../config";
+import { TApiCategory } from "../../../types";
+import { useUserCategoryStats } from "../../../api/getUserCategoryStats";
 
 type TExpenditureItemsStats = {
   id: number;
@@ -46,18 +43,12 @@ type DashboardCategoryGraphProps = {
 };
 
 const DashboardCategoryGraph = ({ organizedCategories, filters }: DashboardCategoryGraphProps) => {
-  const { data, isLoading, error } = useFetch<TExpenditureItemsStats[]>(
-    `${API_URL}?month=${filters.value.month}&year=${filters.value.year}&type=${filters.type}&category=${filters.categoryId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const { data, error, isLoading } = useUserCategoryStats({
+    filters: `month=${filters.value.month}&year=${filters.value.year}&type=${filters.type}&category=${filters.categoryId}`,
+  });
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="alert alert-danger">Something went wrong.</div>;
   }
   if (isLoading) {
     return <LoadingSpinner />;
