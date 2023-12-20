@@ -1,19 +1,17 @@
 import { Box, Typography } from "@mui/material";
-import { Dispatch, useContext, useState } from "react";
+import { Dispatch, useState } from "react";
 import { FloatingLabel } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faPlusCircle, faSave, faTrashAlt, faWarning } from "@fortawesome/free-solid-svg-icons";
-import { randomHash } from "../../utils";
+import { randomHash } from "../../../utils";
 import { isNumber } from "chart.js/helpers";
 import ProductAutocomplete from "./ProductAutocomplete";
 import ReactSelect, { SingleValue } from "react-select";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { AuthContext } from "../../context/AuthContext";
-import LoadingSpinner from "../LoadingSpinner";
-import { ExpenditureListItem, ELReducerAction, TApiCategory } from "../../types";
-import { BACKEND_URL, CURRENCY_SIGN } from "../../config";
+import { ExpenditureListItem, ELReducerAction } from "../../../types";
+import { CURRENCY_SIGN } from "../../../config";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import { useUserCategories } from "../../../api/getUserCategories";
 
 type ExpenditureItemListProps = {
   totalPrice: number | "";
@@ -29,36 +27,12 @@ const ExpenditureItemList = ({ totalPrice, expenditureList, dispatch }: Expendit
   const [category, setCategory] = useState<number | "">("");
   const [action, setAction] = useState<"add_item" | "edit_item">("add_item");
 
-  const { user } = useContext(AuthContext);
-
-  const {
-    isLoading: loadingCategories,
-    error: errorCategories,
-    data: categoryData,
-  } = useQuery(
-    ["categories"],
-    async () => {
-      try {
-        const response = await axios.get<TApiCategory[]>(`${BACKEND_URL}/api/categories/?organized=true`, {
-          headers: { "x-access-token": user?.token ?? "missing-token" },
-        });
-
-        return response.data ?? [];
-      } catch (error) {
-        console.error(error);
-      }
-
-      return [];
-    },
-    {
-      staleTime: 300000,
-    }
-  );
+  const { isLoading: loadingCategories, error: errorCategories, categories } = useUserCategories({});
 
   if (loadingCategories) return <LoadingSpinner />;
   if (errorCategories) return <div className="alert alert-danger">Something went wrong</div>;
 
-  const selectedCategory = categoryData ? categoryData.find((item) => item.id === category) : null;
+  const selectedCategory = categories ? categories.find((item) => item.id === category) : null;
 
   const handleSaveItem = () => {
     if (itemName !== "" && isNumber(quantity) && quantity !== 0 && isNumber(pricePerUnit) && isNumber(category)) {
@@ -146,7 +120,7 @@ const ExpenditureItemList = ({ totalPrice, expenditureList, dispatch }: Expendit
                 color: "#212529",
               }),
             }}
-            options={categoryData?.map((categoryDetails) => ({
+            options={categories?.map((categoryDetails) => ({
               label: categoryDetails.name,
               options: categoryDetails.childs.map((child) => ({
                 label: child.name,

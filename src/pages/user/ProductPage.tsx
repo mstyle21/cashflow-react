@@ -7,9 +7,9 @@ import { AuthContext } from "../../context/AuthContext";
 import { Box } from "@mui/material";
 import { Accordion, FloatingLabel, Form, FormControl } from "react-bootstrap";
 import { debounce } from "chart.js/helpers";
-import { TApiProductResponse } from "../../types";
 import { BACKEND_URL, CURRENCY_SIGN } from "../../config";
 import Paginator from "../../components/Paginator";
+import { ApiPaginatedResponse, ApiProduct } from "../../types";
 
 //TODO: to be simplified, SOLID principle
 //TODO2: implement product`s expenditure details as: date, location and price
@@ -22,16 +22,19 @@ const ProductPage = () => {
   const { isLoading, isError, data } = useQuery({
     queryKey: ["products", search, page, perPage],
     queryFn: async () => {
-      let products: TApiProductResponse = {
+      let products: ApiPaginatedResponse<ApiProduct> = {
         items: [],
         count: 0,
         pages: 0,
       };
 
       await axios
-        .get<TApiProductResponse>(`${BACKEND_URL}/api/products?search=${search}&page=${page}&perPage=${perPage}`, {
-          headers: { "x-access-token": user?.token ?? "missing-token" },
-        })
+        .get<ApiPaginatedResponse<ApiProduct>>(
+          `${BACKEND_URL}/api/products?search=${search}&page=${page}&perPage=${perPage}`,
+          {
+            headers: { "x-access-token": user?.token ?? "missing-token" },
+          }
+        )
         .then((response) => {
           products = response.data;
         })

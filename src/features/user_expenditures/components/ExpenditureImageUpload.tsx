@@ -3,11 +3,11 @@ import React, { Dispatch, useContext, useRef, useState } from "react";
 import { Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
-import { randomHash } from "../../utils";
+import { randomHash } from "../../../utils";
 import axios from "axios";
-import { AuthContext } from "../../context/AuthContext";
-import { TExpenditureImage, EIReducerAction } from "../../types";
-import { BACKEND_URL } from "../../config";
+import { AuthContext } from "../../../context/AuthContext";
+import { TExpenditureImage, EIReducerAction } from "../../../types";
+import { BACKEND_URL } from "../../../config";
 
 type ExpenditureImageUploadProps = {
   images: TExpenditureImage[] | [];

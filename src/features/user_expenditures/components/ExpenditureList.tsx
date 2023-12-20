@@ -1,24 +1,25 @@
 import { Box, Typography } from "@mui/material";
 import moment from "moment";
-import { TApiExpenditure } from "../../types";
-import { BACKEND_URL, CURRENCY_SIGN } from "../../config";
+import { ApiExpenditure } from "../../../types";
+import { BACKEND_URL, CURRENCY_SIGN } from "../../../config";
+import { DEFAULT_IMAGE } from "../../../utils";
 
 type ExpenditureListProps = {
-  expenditures: TApiExpenditure[];
-  openModal: (expenditure: TApiExpenditure) => void;
+  expenditures: ApiExpenditure[];
+  openModal: (expenditure: ApiExpenditure) => void;
 };
 
 const ExpenditureList = ({ expenditures, openModal }: ExpenditureListProps) => {
   return (
     <>
       <Box display="grid" gridTemplateColumns="repeat(4, minmax(250px, 1fr))" gap="30px">
-        {expenditures.map((expenditure: TApiExpenditure) => {
+        {expenditures.map((expenditure: ApiExpenditure) => {
           const date = moment(new Date(expenditure.purchaseDate)).format("DD MMM YYYY");
 
           const imgPath =
             expenditure.images.length > 0
               ? `${BACKEND_URL}/${expenditure.id}/${expenditure.images[0].path}`
-              : "/images/default.jpg";
+              : DEFAULT_IMAGE;
 
           return (
             <Box

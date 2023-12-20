@@ -1,9 +1,9 @@
 import { QueryClientConfig, useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../services/AxiosService";
-import { TApiCategory } from "../types";
+import { ApiCategory } from "../types";
 
 const getUserCategories = async () => {
-  return axiosInstance.get<TApiCategory[]>("/api/categories").then((response) => response.data);
+  return axiosInstance.get<ApiCategory[]>("/api/categories").then((response) => response.data);
 };
 
 type UseUserCategoriesProps = {

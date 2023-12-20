@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { Accordion, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { TApiCategory } from "../../../types";
+import { ApiCategory } from "../../../types";
 import { useUserCategories } from "../../../api/getUserCategories";
 import CategoryModal from "./CategoryModal";
 import { useState } from "react";
@@ -11,12 +11,12 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const CategoryList = () => {
   const [showModal, setShowModal] = useState(false);
-  const [itemToEdit, setItemToEdit] = useState<TApiCategory | null>(null);
+  const [itemToEdit, setItemToEdit] = useState<ApiCategory | null>(null);
 
   const { categories, error, isLoading } = useUserCategories({});
   const deleteUserCategory = useDeleteUserCategory();
 
-  const handleDeleteCategory = (category: TApiCategory) => {
+  const handleDeleteCategory = (category: ApiCategory) => {
     if (confirm(`Are you sure you want to delete: ${category.name} ?`)) {
       deleteUserCategory.mutate(category.id);
     }

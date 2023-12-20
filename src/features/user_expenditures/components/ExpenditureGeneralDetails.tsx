@@ -1,28 +1,14 @@
 import { Box, Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { SetStateAction, useContext } from "react";
+import { SetStateAction } from "react";
 import { FloatingLabel, Form } from "react-bootstrap";
-import { AuthContext } from "../../context/AuthContext";
-import axios from "axios";
 import DatePicker from "react-datepicker";
 import AsyncCreatableSelect from "react-select/async-creatable";
 import ReactSelect from "react-select";
-import LoadingSpinner from "../LoadingSpinner";
 import { isNumber } from "chart.js/helpers";
-import { TExpenditureDetails } from "../../types";
-import { BACKEND_URL } from "../../config";
-
-type Company = {
-  id: number;
-  name: string;
-  created: Date;
-  updated: Date | null;
-};
-
-type SelectOption = {
-  label: string;
-  value: string;
-};
+import { TExpenditureDetails } from "../../../types";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import { useAllCompanies } from "../../../api/getAllCompanies";
+import { useAllCities } from "../../../api/getAllCities";
 
 const ExpenditureGeneralDetails = ({
   error,
@@ -33,72 +19,29 @@ const ExpenditureGeneralDetails = ({
   expenditureDetails: TExpenditureDetails;
   setExpenditureDetails: React.Dispatch<SetStateAction<TExpenditureDetails>>;
 }) => {
-  const { user } = useContext(AuthContext);
-
-  const {
-    isLoading: loadingCities,
-    error: errorCities,
-    data: cityData,
-  } = useQuery(
-    ["cities"],
-    async () => {
-      let list: SelectOption[] | [] = [];
-      let defaultOption: SelectOption | object = {};
-      try {
-        const response = await axios.get<Company[]>(`${BACKEND_URL}/api/cities/`, {
-          headers: { "x-access-token": user?.token ?? "missing-token" },
-        });
-
-        list = response.data.map((city) => {
-          if (city.name.toLowerCase() === "oradea") {
-            defaultOption = {
-              value: city.id.toString(),
-              label: city.name,
-            };
-          }
-          return {
-            value: city.id.toString(),
-            label: city.name,
-          };
-        });
-      } catch (error) {
-        console.error(error);
-      }
-
-      return { options: list, defaultValue: defaultOption };
-    },
-    {
-      staleTime: 300000,
-    }
-  );
-
-  const {
-    isLoading: loadingCompanies,
-    error: errorCompanies,
-    data: companies,
-  } = useQuery(
-    ["companies"],
-    async () => {
-      try {
-        const response = await axios.get<Company[] | []>(`${BACKEND_URL}/api/companies/`, {
-          headers: { "x-access-token": user?.token ?? "missing-token" },
-        });
-        return response.data ?? [];
-      } catch (error) {
-        console.error(error);
-        return [];
-      }
-    },
-    {
-      staleTime: 60000,
-    }
-  );
+  const { isLoading: loadingCities, error: errorCities, data: cityData } = useAllCities({});
+  const { isLoading: loadingCompanies, error: errorCompanies, data: companies } = useAllCompanies({});
 
   if (loadingCities) return <LoadingSpinner />;
-  if (errorCities) return <div className="alert alert-danger">Something went wrong</div>;
+  if (errorCities) return <div className="alert alert-danger">Something went wrong!</div>;
 
   if (loadingCompanies) return <LoadingSpinner />;
-  if (errorCompanies) return <div className="alert alert-danger">Something went wrong</div>;
+  if (errorCompanies) return <div className="alert alert-danger">Something went wrong.</div>;
+
+  let defaultCity = {};
+  const cityOptions = cityData?.map((city) => {
+    if (city.name.toLowerCase() === "oradea") {
+      defaultCity = {
+        value: city.id.toString(),
+        label: city.name,
+      };
+    }
+
+    return {
+      value: city.id.toString(),
+      label: city.name,
+    };
+  });
 
   const promiseOptions = async (inputValue: string) => {
     if (!companies) {
@@ -195,8 +138,8 @@ const ExpenditureGeneralDetails = ({
         <Box>
           <ReactSelect
             placeholder="Select a city"
-            options={cityData?.options}
-            defaultValue={cityData?.defaultValue}
+            options={cityOptions}
+            defaultValue={defaultCity}
             styles={{
               control: (styles) => ({
                 ...styles,
@@ -215,7 +158,7 @@ const ExpenditureGeneralDetails = ({
         </Box>
       </Box>
       <FloatingLabel label="Settlement">
-        <Form.Select placeholder="Settlement">
+        <Form.Select>
           <option value="none">None</option>
           <option value="total">Total</option>
           <option value="partial">Partial</option>

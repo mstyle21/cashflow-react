@@ -1,3 +1,6 @@
+import noImage from "../assets/default.jpg";
+
+export const DEFAULT_IMAGE = noImage;
 export const MONTHS = [
   "january",
   "february",

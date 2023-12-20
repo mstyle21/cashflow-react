@@ -1,13 +1,12 @@
-import React, { SetStateAction, useContext, useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import ExpenditureGeneralDetails from "./ExpenditureGeneralDetails";
 import ExpenditureImageUpload from "./ExpenditureImageUpload";
 import ExpenditureItemList from "./ExpenditureItemList";
-import { AuthContext } from "../../context/AuthContext";
-import { TExpenditureDetails, TEditableExpenditure } from "../../types";
-import { BACKEND_URL } from "../../config";
-import { axiosInstance } from "../../services/AxiosService";
-import { expenditureListReducer, expenditureImagesReducer } from "../../reducers/expenditureReducer";
+import { TExpenditureDetails, TEditableExpenditure } from "../../../types";
+import { BACKEND_URL } from "../../../config";
+import { axiosInstance } from "../../../services/AxiosService";
+import { expenditureListReducer, expenditureImagesReducer } from "../../../reducers/expenditureReducer";
 
 const initialItem: TExpenditureDetails = {
   date: new Date(),
@@ -19,18 +18,15 @@ const initialItem: TExpenditureDetails = {
 
 type ExpenditureModalProps = {
   show: boolean;
-  setShow: React.Dispatch<SetStateAction<boolean>>;
-  closeModalAndRefresh: () => void;
   itemToEdit: TEditableExpenditure | null;
+  closeModal: () => void;
 };
 
-const ExpenditureModal = ({ show, setShow, closeModalAndRefresh, itemToEdit }: ExpenditureModalProps) => {
+const ExpenditureModal = ({ show, closeModal, itemToEdit }: ExpenditureModalProps) => {
   const [error, setError] = useState(false);
   const [expenditureDetails, setExpenditureDetails] = useState<TExpenditureDetails>(initialItem);
   const [expenditureList, dispatchList] = useReducer(expenditureListReducer, []);
   const [expenditureImages, dispatchImages] = useReducer(expenditureImagesReducer, []);
-
-  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     if (itemToEdit) {
@@ -47,7 +43,7 @@ const ExpenditureModal = ({ show, setShow, closeModalAndRefresh, itemToEdit }: E
   }, [itemToEdit]);
 
   const handleCloseModal = () => {
-    setShow(false);
+    closeModal();
     resetModal();
   };
   const resetModal = () => {
@@ -88,7 +84,7 @@ const ExpenditureModal = ({ show, setShow, closeModalAndRefresh, itemToEdit }: E
       .then((response) => {
         if (response.status === 201) {
           resetModal();
-          closeModalAndRefresh();
+          closeModal();
         }
       })
       .catch((error) => {
@@ -97,7 +93,7 @@ const ExpenditureModal = ({ show, setShow, closeModalAndRefresh, itemToEdit }: E
   };
 
   return (
-    <Modal show={show} onHide={() => setShow(false)} dialogClassName="modal-fullscreen">
+    <Modal show={show} onHide={closeModal} dialogClassName="modal-fullscreen">
       <Modal.Header closeButton onHide={handleCloseModal}>
         <Modal.Title>{itemToEdit ? "Edit" : "Add new"} expenditure</Modal.Title>
       </Modal.Header>

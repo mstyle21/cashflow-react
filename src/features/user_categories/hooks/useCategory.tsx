@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { TApiCategory } from "../../../types";
+import { ApiCategory } from "../../../types";
 
-export const useCategory = (itemToEdit: TApiCategory | null) => {
+export const useCategory = (itemToEdit: ApiCategory | null) => {
   const [name, setName] = useState("");
   const [parentId, setParentId] = useState(0);
 

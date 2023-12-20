@@ -1,12 +1,12 @@
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
-import { TApiCategory } from "../../../types";
+import { ApiCategory } from "../../../types";
 import { useSaveUserCategory } from "../../../api/saveUserCategory";
 import { useCategory } from "../hooks/useCategory";
 
 type CategoryModalProps = {
   showModal: boolean;
-  itemToEdit: TApiCategory | null;
-  parentCategories: TApiCategory[];
+  itemToEdit: ApiCategory | null;
+  parentCategories: ApiCategory[];
   closeModal: (refreshList?: boolean) => void;
 };
 

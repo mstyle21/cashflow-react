@@ -19,20 +19,17 @@ import { isArray } from "chart.js/helpers";
 import moment from "moment";
 import { CURRENCY_SIGN } from "../../../config";
 import { useUserExpenditureStats } from "../../../api/getUserExpenditureStats";
-
-type TExpenditureStats = {
-  id: number;
-  totalPrice: number;
-  purchaseDate: string;
-};
+import { ApiExpenditure } from "../../../types";
 
 type DashboardPaymentGraphProps = {
   filters: TPeriodFilterItem;
 };
 
 const DashboardPaymentGraph = ({ filters }: DashboardPaymentGraphProps) => {
-  const { data, error, isLoading } = useUserExpenditureStats({
-    filters: `month=${filters.value.month}&year=${filters.value.year}&type=${filters.type}`,
+  const { expenditureStats, error, isLoading } = useUserExpenditureStats({
+    month: filters.value.month,
+    year: filters.value.year,
+    type: filters.type,
   });
 
   if (error) {
@@ -42,7 +39,7 @@ const DashboardPaymentGraph = ({ filters }: DashboardPaymentGraphProps) => {
     return <LoadingSpinner />;
   }
 
-  const { labels, stats: dataValues, totalSpent } = processPaymentStats(filters, data);
+  const { labels, stats: dataValues, totalSpent } = processPaymentStats(filters, expenditureStats);
 
   let label: string;
   switch (filters.type) {
@@ -119,7 +116,7 @@ const DashboardPaymentGraph = ({ filters }: DashboardPaymentGraphProps) => {
 
 export default DashboardPaymentGraph;
 
-function processPaymentStats(filters: TPeriodFilterItem, expenditureStats: TExpenditureStats[] | null) {
+function processPaymentStats(filters: TPeriodFilterItem, expenditureStats: ApiExpenditure[]) {
   const labels: string[] = [];
   const stats: number[] = [];
 

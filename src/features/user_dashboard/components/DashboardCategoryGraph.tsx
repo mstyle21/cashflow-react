@@ -19,32 +19,20 @@ import {
 
 import { isArray } from "chart.js/helpers";
 import { CURRENCY_SIGN } from "../../../config";
-import { TApiCategory } from "../../../types";
+import { ApiCategory, ApiExpenditureItem } from "../../../types";
 import { useUserCategoryStats } from "../../../api/getUserCategoryStats";
 
-type TExpenditureItemsStats = {
-  id: number;
-  quantity: number;
-  pricePerUnit: number;
-  totalPrice: number;
-  category: {
-    id: number;
-    name: string;
-    parent: {
-      id: number;
-      name: string;
-    };
-  };
-};
-
 type DashboardCategoryGraphProps = {
-  organizedCategories: TApiCategory[];
+  organizedCategories: ApiCategory[];
   filters: TPeriodFilterItem & { categoryId: number };
 };
 
 const DashboardCategoryGraph = ({ organizedCategories, filters }: DashboardCategoryGraphProps) => {
-  const { data, error, isLoading } = useUserCategoryStats({
-    filters: `month=${filters.value.month}&year=${filters.value.year}&type=${filters.type}&category=${filters.categoryId}`,
+  const { categoryStats, error, isLoading } = useUserCategoryStats({
+    month: filters.value.month,
+    year: filters.value.year,
+    type: filters.type,
+    category: filters.categoryId,
   });
 
   if (error) {
@@ -54,7 +42,11 @@ const DashboardCategoryGraph = ({ organizedCategories, filters }: DashboardCateg
     return <LoadingSpinner />;
   }
 
-  const { labels, organizedStats, totalSpent } = processCategoryStats(organizedCategories, data, filters.categoryId);
+  const { labels, organizedStats, totalSpent } = processCategoryStats(
+    organizedCategories,
+    categoryStats,
+    filters.categoryId
+  );
 
   const pieData: ChartData<"pie"> = {
     labels: labels,
@@ -101,8 +93,8 @@ const DashboardCategoryGraph = ({ organizedCategories, filters }: DashboardCateg
 export default DashboardCategoryGraph;
 
 const processCategoryStats = (
-  categoryList: TApiCategory[] | undefined,
-  expenditureItems: TExpenditureItemsStats[] | null,
+  categoryList: ApiCategory[] | undefined,
+  expenditureItems: ApiExpenditureItem[],
   parentFilter: number
 ) => {
   const labels: string[] = [];

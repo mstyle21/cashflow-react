@@ -1,11 +1,11 @@
-export type TApiCategory = {
+export type ApiCategory = {
   id: number;
   name: string;
   parent: {
     id: number;
     name: string;
   } | null;
-  childs: TApiCategory[];
+  childs: ApiCategory[];
 };
 export type TEditableExpenditure = {
   id: number;
@@ -51,7 +51,7 @@ export type EIReducerAction =
     }
   | { type: "reset" }
   | { type: "add_items"; payload: TExpenditureImage[] };
-export type TApiExpenditure = {
+export type ApiExpenditure = {
   id: number;
   company: {
     name: string;
@@ -78,7 +78,7 @@ export type TApiExpenditure = {
     path: string;
   }[];
 };
-export type TApiProduct = {
+export type ApiProduct = {
   id: number;
   name: string;
   description: string;
@@ -91,8 +91,38 @@ export type TApiProduct = {
     };
   }[];
 };
-export type TApiProductResponse = {
-  items: TApiProduct[];
+export type ApiPaginatedResponse<T> = {
+  items: T[];
   count: number;
   pages: number;
+};
+export type ApiCity = {
+  id: number;
+  name: string;
+};
+export type ApiCompany = {
+  id: number;
+  name: string;
+  keywords: string;
+};
+export type ApiExpenditureItem = {
+  id: number;
+  expenditure: ApiExpenditure;
+  product: ApiProduct;
+  quantity: number;
+  pricePerUnit: number;
+  totalPrice: number;
+  category: {
+    id: number;
+    name: string;
+    parent: {
+      id: number;
+      name: string;
+    };
+  };
+};
+export type UserStatsFilters = {
+  month: string;
+  year: string;
+  type: "allTime" | "month" | "year";
 };
