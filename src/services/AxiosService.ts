@@ -1,7 +1,9 @@
-import axios from "axios";
+import axios, { InternalAxiosRequestConfig } from "axios";
 import { BACKEND_URL } from "../config";
+import { TOKEN_KEY } from "../hooks/useAuth";
+import { localStorageService } from "./LocalStorageService";
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: BACKEND_URL,
   timeout: 30000,
   headers: {
@@ -9,8 +11,21 @@ const axiosInstance = axios.create({
   },
 });
 
-const setAccessToken = (token: string) => {
-  axiosInstance.defaults.headers.common["x-access-token"] = token;
-};
+axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const token = localStorageService.getItem(TOKEN_KEY);
 
-export { axiosInstance, setAccessToken };
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  }
+  // (error) => {
+  //   console.log(error);
+  // }
+);

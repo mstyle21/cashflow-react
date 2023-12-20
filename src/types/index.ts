@@ -1,8 +1,6 @@
 export type TApiCategory = {
   id: number;
   name: string;
-  created: string;
-  updated: string;
   parent: {
     id: number;
     name: string;

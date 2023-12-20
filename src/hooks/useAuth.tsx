@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useLocalStorage } from "./useLocalStorage";
+import { localStorageService } from "../services/LocalStorageService";
 
-const TOKEN_KEY = "user_token";
+export const TOKEN_KEY = "cashflow_utkn";
 
 export interface IUser {
   id: number;
@@ -45,9 +45,8 @@ const getUserFromToken = (token: string): IUser => {
 };
 
 export const useAuth = () => {
-  const { getItem, setItem, removeItem } = useLocalStorage();
   const [user, setUser] = useState<IUser | null>(() => {
-    const token = getItem(TOKEN_KEY);
+    const token = localStorageService.getItem(TOKEN_KEY);
 
     if (token) {
       return getUserFromToken(token);
@@ -60,14 +59,14 @@ export const useAuth = () => {
   const login = (token: string): void => {
     const user = getUserFromToken(token);
     setUser(user);
-    setItem(TOKEN_KEY, token);
+    localStorageService.setItem(TOKEN_KEY, token);
   };
 
   const logout = (redirectPath: string | null = null): void => {
     setLoginRedirect(redirectPath);
 
     setUser(null);
-    removeItem(TOKEN_KEY);
+    localStorageService.removeItem(TOKEN_KEY);
   };
 
   const getTokenStatus = (): TTokenStatus => {

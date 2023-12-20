@@ -6,7 +6,7 @@ import ExpenditureItemList from "./ExpenditureItemList";
 import { AuthContext } from "../../context/AuthContext";
 import { TExpenditureDetails, TEditableExpenditure } from "../../types";
 import { BACKEND_URL } from "../../config";
-import { axiosInstance, setAccessToken } from "../../services/AxiosService";
+import { axiosInstance } from "../../services/AxiosService";
 import { expenditureListReducer, expenditureImagesReducer } from "../../reducers/expenditureReducer";
 
 const initialItem: TExpenditureDetails = {
@@ -76,7 +76,6 @@ const ExpenditureModal = ({ show, setShow, closeModalAndRefresh, itemToEdit }: E
       }
     }
 
-    setAccessToken(user?.token ?? "missing-token");
     axiosInstance
       .request({
         url: `${BACKEND_URL}/api/expenditures/${itemToEdit ? itemToEdit.id : ""}`,

@@ -1,9 +1,7 @@
-import { useContext, useState } from "react";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
-import { TApiCategory } from "../../pages/user/CategoryPage";
-import { AuthContext } from "../../context/AuthContext";
-import { BACKEND_URL } from "../../config";
-import { axiosInstance, setAccessToken } from "../../services/AxiosService";
+import { TApiCategory } from "../../../types";
+import { useSaveUserCategory } from "../../../api/saveUserCategory";
+import { useCategory } from "../hooks/useCategory";
 
 type CategoryModalProps = {
   showModal: boolean;
@@ -13,33 +11,40 @@ type CategoryModalProps = {
 };
 
 const CategoryModal = ({ showModal, itemToEdit, parentCategories, closeModal }: CategoryModalProps) => {
-  const [name, setName] = useState(itemToEdit?.name ?? "");
-  const [parentId, setParentId] = useState(itemToEdit?.parent?.id ?? 0);
-
-  const { user } = useContext(AuthContext);
+  const { name, parentId, setName, setParentId, resetValues } = useCategory(itemToEdit);
+  const saveUserCategory = useSaveUserCategory();
 
   const handleSaveCategory = () => {
-    setAccessToken(user?.token ?? "missing-token");
+    if (!name) {
+      return false;
+    }
 
-    const data = { name, parentId };
+    const data = {
+      id: itemToEdit?.id,
+      name: name,
+      parentId: parentId,
+    };
 
-    axiosInstance
-      .request({
-        method: itemToEdit ? "put" : "post",
-        data: data,
-        url: `${BACKEND_URL}/api/categories/${itemToEdit ? itemToEdit.id : ""}`,
-      })
-      .then((response) => {
-        if (response.status === 201) {
-          closeModal(true);
-        }
-      })
-      .catch((error) => console.error(error));
+    saveUserCategory.mutate(data, {
+      onSuccess: () => {
+        resetValues();
+        closeModal();
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
   };
 
   return (
     <Modal show={showModal} onHide={closeModal}>
-      <Modal.Header closeButton onHide={closeModal}>
+      <Modal.Header
+        closeButton
+        onHide={() => {
+          closeModal();
+          resetValues();
+        }}
+      >
         <Modal.Title>{itemToEdit ? "Edit" : "Add new"} category</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -66,7 +71,13 @@ const CategoryModal = ({ showModal, itemToEdit, parentCategories, closeModal }: 
         <Button variant="primary" onClick={handleSaveCategory}>
           Save
         </Button>
-        <Button variant="secondary" onClick={() => closeModal()}>
+        <Button
+          variant="secondary"
+          onClick={() => {
+            closeModal();
+            resetValues();
+          }}
+        >
           Close
         </Button>
       </Modal.Footer>
