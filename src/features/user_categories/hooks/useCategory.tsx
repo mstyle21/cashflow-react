@@ -5,7 +5,6 @@ export const useCategory = (itemToEdit: ApiCategory | null) => {
   const [name, setName] = useState("");
   const [parentId, setParentId] = useState(0);
 
-  console.log(itemToEdit);
   useEffect(() => {
     setName(itemToEdit ? itemToEdit.name : "");
     setParentId(itemToEdit && itemToEdit.parent ? itemToEdit.parent.id : 0);

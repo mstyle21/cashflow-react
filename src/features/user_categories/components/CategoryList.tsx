@@ -38,7 +38,7 @@ const CategoryList = () => {
       </Box>
       <Box display="grid" gridTemplateColumns="repeat(4, minmax(250px, 1fr))" gap="30px">
         {!isLoading && error && <p className="alert alert-danger text-center">Something went wrong!</p>}
-        {isLoading ?? <LoadingSpinner />}
+        {isLoading && <LoadingSpinner />}
         {categories.map((category) => {
           if (category.parent === null) {
             return (
